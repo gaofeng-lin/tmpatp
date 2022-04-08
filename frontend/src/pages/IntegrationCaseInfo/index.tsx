@@ -12,7 +12,7 @@ import fileDownload from 'js-file-download';
 import qs from 'qs';
 
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2678397_5ja2z3qbsbb.js',
+  scriptUrl: '//at.alicdn.com/t/font_2678397_812ws4egpsu.js',
 });
 
 const excludeFileLists = ["turb_0.dat","turb.dat","flow_0.dat","tecflow.plt.bak","log0.log","preversion","sentinel"]
@@ -84,11 +84,17 @@ class App extends React.Component {
       children: [
         {
           dataIndex: "result_evaluation_ori",
-          width: 140
+          width: 140,
+          render: (value: any) => {
+            return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> : <span>{value}</span>
+          }
         },
         {
           dataIndex: "result_evaluation_pre",
-          width: 140
+          width: 140,
+          render: (value: any) => {
+            return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> : <span>{value}</span>
+          }
         },
       ]
       
@@ -308,8 +314,7 @@ class App extends React.Component {
 
   fetchResults = (case_name:any,solver_version:Number) => {
     this.setState({ loading: true });
-    
-    let filename = "PHengLEI_System__"+solver_version + "_" +case_name+".zip";
+    let filename = "PHengLEI_Integration__"+solver_version + "_" +case_name+".zip";
     axios({
       url: "/api/checkResultsDirExists",
       method: "get",
@@ -402,6 +407,7 @@ class App extends React.Component {
         onChange={this.handleTableChange}
         rowKey="case_id" 
         tableLayout="auto"
+        pagination={{defaultPageSize:20,showQuickJumper:true}}
         bordered
       />
       </>

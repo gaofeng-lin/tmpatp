@@ -88,7 +88,13 @@ class CaseList extends Component<CaseListProps, CaseListState> {
               </div>
             }
           >
-              <Table rowKey="case_id" rowSelection={rowSelection} columns={this.columns} dataSource={this.props.data} />
+              <Table 
+              rowKey="case_id" 
+              rowSelection={rowSelection} 
+              columns={this.columns} 
+              dataSource={this.props.data} 
+              pagination={{hideOnSinglePage:true,defaultPageSize:20,showQuickJumper:true}}
+              />
           </Drawer>
          );
     }

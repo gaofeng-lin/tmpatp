@@ -84,11 +84,17 @@ class App extends React.Component {
       children: [
         {
           dataIndex: "result_evaluation_ori",
-          width: 140
+          width: 140,
+          render: (value: any) => {
+            return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> : <span>{value}</span>
+          }
         },
         {
           dataIndex: "result_evaluation_pre",
-          width: 140
+          width: 140,
+          render: (value: any) => {
+            return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> : <span>{value}</span>
+          }
         },
       ]
       
@@ -401,6 +407,7 @@ class App extends React.Component {
         onChange={this.handleTableChange}
         rowKey="case_id" 
         tableLayout="auto"
+        pagination={{defaultPageSize:20,showQuickJumper:true}}
         bordered
       />
       </>

@@ -76,7 +76,7 @@ router.get('/checkShouldDownload', async ctx => {
     if(type == "system")
         CHECKSQL = "SELECT state FROM testcases_system_cdcloud  WHERE test_case_id="+test_case_id;
     else if(type == "integration")
-        CHECKSQL = "SELECT state FROM testcases_phengleiv3d0_active  WHERE test_case_id="+test_case_id;
+        CHECKSQL = "SELECT state FROM testcases_PHengLEIv3d0_Active  WHERE test_case_id="+test_case_id;
     const data = await query(CHECKSQL);
     ctx.body = data;
 });
@@ -89,7 +89,7 @@ router.get('/applydownload', async ctx => {
     if(type == "system")
         UODATEAPPLYSQL = "UPDATE testcases_system_cdcloud SET state=1 WHERE test_case_id="+test_case_id;
     else if(type == "integration")
-        UODATEAPPLYSQL = "UPDATE testcases_phengleiv3d0_active SET state=1 WHERE test_case_id="+test_case_id;
+        UODATEAPPLYSQL = "UPDATE testcases_PHengLEIv3d0_Active SET state=1 WHERE test_case_id="+test_case_id;
     const data = await query(UODATEAPPLYSQL);
     if(data.status == 200){
         ctx.body = {
@@ -112,7 +112,7 @@ router.post('/restart', async ctx => {
     if(type == "system")
         RESTART_SQL = "UPDATE testcases_system_cdcloud SET is_worked=2,run_time=0,result_evaluation_ori='',result_evaluation_pre='' WHERE test_case_id="+test_case_id;
     else if(type == "integration")
-        RESTART_SQL = "UPDATE testcases_phengleiv3d0_active SET is_worked=2,run_time=0,result_evaluation_ori='',result_evaluation_pre='' WHERE test_case_id="+test_case_id;
+        RESTART_SQL = "UPDATE testcases_PHengLEIv3d0_Active SET is_worked=2,run_time=0,result_evaluation_ori='',result_evaluation_pre='' WHERE test_case_id="+test_case_id;
     UPDATE_CASE_NUM_SQL_WITHERROR = "UPDATE case_tests SET result_over=result_over-1,errorcase_num=errorcase_num-1 WHERE test_id="+test_id;
     UPDATE_CASE_NUM_SQL_WITHOUTERROR = "UPDATE case_tests SET result_over=result_over-1 WHERE test_id="+test_id;
     if(test_case_id) {

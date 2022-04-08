@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./index.less";
-import { Table, Tooltip,Drawer,Space } from "antd";
+import { Table, Tooltip, Drawer, Space } from "antd";
 import reqwest from "reqwest";
 import { PlusOutlined } from '@ant-design/icons';
 import moment from "moment";
@@ -11,21 +11,21 @@ class App extends React.Component {
   state = {
     data: [],
     loading: false,
-    showAddCaseDrawer:false,
-    currentTestId:0,
+    showAddCaseDrawer: false,
+    currentTestId: 0,
     // CaseListLoading:false,
     // CaseListData:[],
     // selectedRowKeys:[]
   };
-  
+
   columns = [
     {
       title: "序号",
       dataIndex: "solver_version",
       width: 120,
-      align:"center",
+      align: "center",
       sorter: (a: { solver_version: number; }, b: { solver_version: number; }) => a.solver_version - b.solver_version,
-      defaultSortOrder:"descend",
+      defaultSortOrder: "descend",
       fixed: 'left',
     },
     {
@@ -37,89 +37,25 @@ class App extends React.Component {
       title: "分支",
       dataIndex: "branchName",
       width: 120,
+      render: (value: any) => { return this.formatterBranch(value) }
     },
     {
       title: "更新者",
       dataIndex: "update_author",
       width: 120,
-    },
-    {
-      title: () => {
-        return (
-          <div>
-          <p>系统算例</p>
-          <p>(错误/已完成/总数)</p>
-          </div>
-        )
-      },
-      align:"center",
-      width: 280,
-      render:(record:any) => <Space size="middle">
-                  <a onClick={()=>this.linkToSystemCaseInfo(record)}>
-                    <Tooltip placement="topRight" title={"错误："+record.system_case_errornum}>
-                      <span style={{color:"red"}}>{record.system_case_errornum}</span>
-                    </Tooltip>/
-                    <Tooltip placement="top" title={"已完成："+record.system_case_over}>
-                      <span style={{color:"green"}}>{record.system_case_over}</span>
-                    </Tooltip>/
-                    <Tooltip placement="topLeft" title={"总数："+record.system_case_num}>
-                      <span>{record.system_case_num}</span>
-                    </Tooltip>
-                  </a>
-                  {/* <Tooltip placement="top" title="添加算例">
-                    <a  onClick={()=>this.handleAddCase(record)}>
-                      <PlusOutlined />
-                    </a>
-                  </Tooltip> */}
-                </Space>
-      
-    },
-    {
-      title: () => {
-        return (
-          <div>
-          <p>集成算例</p>
-          <p>(错误/已完成/总数)</p>
-          </div>
-        )
-      },
-      align:"center",
-      width: 280,
-      render:(record:any) => <Space size="middle">
-                  <a onClick={()=>this.linkToIntegrationCaseInfo(record)}>
-                    <Tooltip placement="topRight" title={"错误："+record.integration_case_errornum}>
-                      <span style={{color:"red"}}>{record.integration_case_errornum}</span>
-                    </Tooltip>/
-                    <Tooltip placement="top" title={"已完成："+record.integration_case_over}>
-                      <span style={{color:"green"}}>{record.integration_case_over}</span>
-                    </Tooltip>/
-                    <Tooltip placement="topLeft" title={"总数："+record.integration_case_num}>
-                      <span>{record.integration_case_num}</span>
-                    </Tooltip>
-                  </a>
-                </Space>
-      
+      render: (value: any,record:any) => { return record.branchName == "ActiveBranch"?<span style={{ color: "#CFB53B"}}>{value}</span>:<span>{value}</span> }
     },
     {
       title: "提交日期",
       dataIndex: "svnDate",
       width: 200,
-      render:(value:any) => {return this.formatterTime(value)}
-    },
-    {
-      title: "Hash值",
-      dataIndex: "next_Hashs",
-      width: 160,
-      render:(value:any) => {
-        let tempList = value.split(":");
-        return tempList.length>1?tempList[1].substr(0,10):tempList[0].substr(0,10)
-      }
+      render: (value: any) => { return this.formatterTime(value) }
     },
     {
       title: "提交日志",
       dataIndex: "update_Log",
       width: 200,
-      render: (address:any) => (
+      render: (address: any) => (
         <Tooltip placement="topLeft" title={address}>
           {address}
         </Tooltip>
@@ -128,36 +64,129 @@ class App extends React.Component {
     {
       title: "编译结果",
       dataIndex: "state",
-      align:"center",
+      align: "center",
       width: 180,
-      render:(value:any) => {return this.formatterResults(value)},
+      render: (value: any) => { return this.formatterResults(value) },
       filters: [
         {
-          text: 'OK',
+          text: '编译错误',
+          value: '3',
+        },
+        {
+          text: '编译完成',
           value: '2',
         },
         {
-          text: 'Error',
-          value: '0'||'1',
+          text: '正在编译',
+          value: '1',
+        },
+        {
+          text: '未编译',
+          value: '0',
         },
       ],
-      onFilter: (value, record) =>  (record.state).toString().indexOf(value) === 0,
+      onFilter: (value, record) => (record.state).toString().indexOf(value) === 0,
     },
-    
+    {
+      title: () => {
+        return (
+          <div>
+            <p>集成算例</p>
+            <p>(错误/已完成/总数)</p>
+          </div>
+        )
+      },
+      align: "center",
+      width: 280,
+      render: (record: any) => <Space size="middle">
+        <a onClick={() => this.linkToIntegrationCaseInfo(record)}>
+          <Tooltip placement="topRight" title={"错误：" + record.integration_case_errornum}>
+            <span style={{ color: "red" }}>{record.integration_case_errornum}</span>
+          </Tooltip>/
+          <Tooltip placement="top" title={"已完成：" + record.integration_case_over}>
+            <span style={{ color: "green" }}>{record.integration_case_over}</span>
+          </Tooltip>/
+          <Tooltip placement="topLeft" title={"总数：" + record.integration_case_num}>
+            <span>{record.integration_case_num}</span>
+          </Tooltip>
+        </a>
+      </Space>
+
+    },
+    {
+      title: () => {
+        return (
+          <div>
+            <p>系统算例</p>
+            <p>(错误/已完成/总数)</p>
+          </div>
+        )
+      },
+      align: "center",
+      width: 280,
+      render: (record: any) => <Space size="middle">
+        <a onClick={() => this.linkToSystemCaseInfo(record)}>
+          <Tooltip placement="topRight" title={"错误：" + record.system_case_errornum}>
+            <span style={{ color: "red" }}>{record.system_case_errornum}</span>
+          </Tooltip>/
+          <Tooltip placement="top" title={"已完成：" + record.system_case_over}>
+            <span style={{ color: "green" }}>{record.system_case_over}</span>
+          </Tooltip>/
+          <Tooltip placement="topLeft" title={"总数：" + record.system_case_num}>
+            <span>{record.system_case_num}</span>
+          </Tooltip>
+        </a>
+      </Space>
+
+    },
+    {
+      title: "Hash值",
+      dataIndex: "next_Hashs",
+      width: 120,
+      render: (value: any) => {
+        let tempList = value.split(":");
+        return tempList.length > 1 ? tempList[1].substr(0, 10) : tempList[0].substr(0, 10)
+      }
+    },
+
   ];
-  
-  formatterResults = (val:Number) => {
-    if(val == 2)
-      return "OK"
+
+  formatterResults = (val: Number) => {
+    let spanCompent = null
+    switch (val) {
+      case 0:
+        spanCompent = <span>未编译</span>
+        break;
+      case 1:
+        spanCompent = <span>正在编译</span>
+
+        break;
+      case 2:
+        spanCompent = <span>编译完成</span>
+
+        break;
+      case 3:
+        spanCompent = <span style={{ color: "red" }}>编译错误</span>
+
+        break;
+      default:
+        break;
+    }
+    return spanCompent
+  }
+
+  formatterBranch = (val: any) => {
+    if (val == "ActiveBranch")
+      return <span style={{ color: "#CFB53B", fontSize: "larger" }}>{val}</span>
     else
-      return "Error"
+      return <span>{val}</span>
   }
 
   formatterTime = (val) => {
-    return val ? moment(val).format("YYYY-MM-DD HH:mm:ss"):""
+    return val ? moment(val).format("YYYY-MM-DD HH:mm:ss") : ""
   }
 
-  linkToSystemCaseInfo(record){
+  linkToSystemCaseInfo(record) {
     history.push({
       pathname: '/systemcaseinfo',
       query: {
@@ -168,7 +197,7 @@ class App extends React.Component {
     });
   }
 
-  linkToIntegrationCaseInfo(record){
+  linkToIntegrationCaseInfo(record) {
     history.push({
       pathname: '/integrationcaseinfo',
       query: {
@@ -192,11 +221,10 @@ class App extends React.Component {
   //   });
   // };
 
-  handleAddCase(record:any)
-  {
+  handleAddCase(record: any) {
     this.showAddCaseDrawer(record.test_id)
   }
-  
+
   componentDidMount() {
     this.fetch();
   }
@@ -246,17 +274,18 @@ class App extends React.Component {
   render() {
     return (
       <>
-      <Table
-        scroll={{ x: 1200}}
-        columns={this.columns}
-        dataSource={this.state.data}
-        loading={this.state.loading}
-        onChange={this.handleTableChange}
-        rowKey="idsolver_info" 
-        tableLayout="auto"
-        bordered
-      />
-      {/* <CaseList 
+        <Table
+          scroll={{ x: 1200 }}
+          columns={this.columns}
+          dataSource={this.state.data}
+          loading={this.state.loading}
+          onChange={this.handleTableChange}
+          rowKey="idsolver_info"
+          tableLayout="auto"
+          pagination={{ defaultPageSize: 20, showQuickJumper: true }}
+          bordered
+        />
+        {/* <CaseList 
         loading={this.state.CaseListLoading}
         selectedRowKeys={this.state.selectedRowKeys}
         data={this.state.CaseListData}

@@ -43,7 +43,7 @@ class App extends React.Component {
       title: "更新者",
       dataIndex: "update_author",
       width: 120,
-      render: (value: any,record:any) => { return record.branchName == "ActiveBranch"?<span style={{ color: "orange"}}>{value}</span>:<span>{value}</span> }
+      render: (value: any,record:any) => { return record.branchName == "ActiveBranch"?<span style={{ color: "blue"}}>{value}</span>:<span>{value}</span> }
     },
     {
       title: "提交日期",
@@ -62,18 +62,18 @@ class App extends React.Component {
       ),
     },
     {
-      title: "结果",
+      title: "编译结果",
       dataIndex: "state",
       align: "center",
       width: 180,
       render: (value: any) => { return this.formatterResults(value) },
       filters: [
         {
-          text: '编译错误',
+          text: '不通过',
           value: '3',
         },
         {
-          text: '编译完成',
+          text: '通过',
           value: '2',
         },
         {
@@ -162,11 +162,11 @@ class App extends React.Component {
 
         break;
       case 2:
-        spanCompent = <span>编译完成</span>
+        spanCompent = <span>通过</span>
 
         break;
       case 3:
-        spanCompent = <span style={{ color: "red" }}>编译错误</span>
+        spanCompent = <span style={{ color: "red" }}>不通过</span>
 
         break;
       default:
@@ -177,7 +177,7 @@ class App extends React.Component {
 
   formatterBranch = (val: any) => {
     if (val == "ActiveBranch")
-      return <span style={{ color: "orange", fontSize: "larger" }}>{val}</span>
+      return <span style={{ color: "blue" }}>{val}</span>
     else
       return <span>{val}</span>
   }

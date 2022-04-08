@@ -43,7 +43,7 @@ class App extends React.Component {
       title: "更新者",
       dataIndex: "update_author",
       width: 120,
-      render: (value: any,record:any) => { return record.branchName == "ActiveBranch"?<span style={{ color: "#CFB53B"}}>{value}</span>:<span>{value}</span> }
+      render: (value: any,record:any) => { return record.branchName == "ActiveBranch"?<span style={{ color: "orange"}}>{value}</span>:<span>{value}</span> }
     },
     {
       title: "提交日期",
@@ -62,7 +62,7 @@ class App extends React.Component {
       ),
     },
     {
-      title: "编译结果",
+      title: "结果",
       dataIndex: "state",
       align: "center",
       width: 180,
@@ -177,7 +177,7 @@ class App extends React.Component {
 
   formatterBranch = (val: any) => {
     if (val == "ActiveBranch")
-      return <span style={{ color: "#CFB53B", fontSize: "larger" }}>{val}</span>
+      return <span style={{ color: "orange", fontSize: "larger" }}>{val}</span>
     else
       return <span>{val}</span>
   }

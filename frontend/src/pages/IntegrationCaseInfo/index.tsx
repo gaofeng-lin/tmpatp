@@ -86,14 +86,14 @@ class App extends React.Component {
           dataIndex: "result_evaluation_ori",
           width: 140,
           render: (value: any) => {
-            return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> : <span>{value}</span>
+            return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> :value=="Terrible"?<span style={{ color: "#1890ff" }}>{value}</span>: <span>{value}</span>
           }
         },
         {
           dataIndex: "result_evaluation_pre",
           width: 140,
           render: (value: any) => {
-            return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> : <span>{value}</span>
+            return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> :value=="Terrible"?<span style={{ color: "#1890ff" }}>{value}</span>: <span>{value}</span>
           }
         },
       ]

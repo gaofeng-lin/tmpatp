@@ -104,7 +104,7 @@ router.get('/applydownload', async ctx => {
     }
 });
 
-reAction = (test_id,type,actionType) =>{
+reAction = (test_case_id,test_id,type,actionType) =>{
     RESTART_SQL = ""
     UPDATE_CASE_NUM_SQL_WITHERROR = "";
     UPDATE_CASE_NUM_SQL_WITHOUTERROR = "";
@@ -125,7 +125,8 @@ reAction = (test_id,type,actionType) =>{
         UPDATE_CASE_NUM_SQL_WITHERROR = "UPDATE case_tests SET integration_case_over=integration_case_over-1,integration_case_errornum=integration_case_errornum-1 WHERE test_id="+test_id;
         UPDATE_CASE_NUM_SQL_WITHOUTERROR = "UPDATE case_tests SET integration_case_over=integration_case_over-1 WHERE test_id="+test_id;
     }
-    return  RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR
+
+    return  [RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR]
     
 }
 // 重算
@@ -135,8 +136,8 @@ router.post('/restart', async ctx => {
     RESTART_SQL = ""
     UPDATE_CASE_NUM_SQL_WITHERROR = "";
     UPDATE_CASE_NUM_SQL_WITHOUTERROR = "";
-    RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR = reAction(test_id,type,'restart')
     if(test_case_id) {
+        [RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR] = reAction(test_case_id,test_id,type,'restart')
         const data = await query(RESTART_SQL);
         if(is_error_case){
             casedata = await query(UPDATE_CASE_NUM_SQL_WITHERROR);
@@ -172,8 +173,8 @@ router.post('/restart', async ctx => {
 router.post('/reanalysis', async ctx => {
     const res = ctx.request.body;
     const { test_case_id = 0, is_error_case = false, test_id = 0 ,type="system"} = res;
-    RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR = reAction(test_id,type,'reanalysis')
     if(test_case_id) {
+        [RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR] = reAction(test_case_id,test_id,type,'reanalysis')
         const data = await query(RESTART_SQL);
         if(is_error_case){
             casedata = await query(UPDATE_CASE_NUM_SQL_WITHERROR);

@@ -23,7 +23,7 @@ export default defineConfig({
   antd: {},
   proxy: {
     '/api': {
-      'target': 'http://localhost:3456/api',
+      'target': 'http://localhost:11256/api',
       'changeOrigin': true,
       secure: false, 
       'pathRewrite': { '^/api' : '' },

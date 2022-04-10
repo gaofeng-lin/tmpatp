@@ -104,17 +104,75 @@ router.get('/applydownload', async ctx => {
     }
 });
 
+reAction = (test_id,type,actionType) =>{
+    RESTART_SQL = ""
+    UPDATE_CASE_NUM_SQL_WITHERROR = "";
+    UPDATE_CASE_NUM_SQL_WITHOUTERROR = "";
+    workstate = '';
+    if(actionType=="restart")
+    {
+        workstate = '2';
+    }
+    if(type == "system")
+    {
+        RESTART_SQL = "UPDATE testcases_system_cdcloud SET is_worked="+workstate+",run_time=0,result_evaluation_ori='',result_evaluation_pre='',value_withpre='',value_withori='' WHERE test_case_id="+test_case_id;
+        UPDATE_CASE_NUM_SQL_WITHERROR = "UPDATE case_tests SET system_case_over=system_case_over-1,system_case_errornum=system_case_errornum-1 WHERE test_id="+test_id;
+        UPDATE_CASE_NUM_SQL_WITHOUTERROR = "UPDATE case_tests SET system_case_over=system_case_over-1 WHERE test_id="+test_id;
+    }   
+    else if(type == "integration")
+    {
+        RESTART_SQL = "UPDATE testcases_PHengLEIv3d0_Active SET is_worked="+workstate+",run_time=0,result_evaluation_ori='',result_evaluation_pre='',value_withpre='',value_withori='' WHERE test_case_id="+test_case_id;
+        UPDATE_CASE_NUM_SQL_WITHERROR = "UPDATE case_tests SET integration_case_over=integration_case_over-1,integration_case_errornum=integration_case_errornum-1 WHERE test_id="+test_id;
+        UPDATE_CASE_NUM_SQL_WITHOUTERROR = "UPDATE case_tests SET integration_case_over=integration_case_over-1 WHERE test_id="+test_id;
+    }
+    return  RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR
+    
+}
 // 重算
 router.post('/restart', async ctx => {
     const res = ctx.request.body;
     const { test_case_id = 0, is_error_case = false, test_id = 0 ,type="system"} = res;
     RESTART_SQL = ""
-    if(type == "system")
-        RESTART_SQL = "UPDATE testcases_system_cdcloud SET is_worked=2,run_time=0,result_evaluation_ori='',result_evaluation_pre='' WHERE test_case_id="+test_case_id;
-    else if(type == "integration")
-        RESTART_SQL = "UPDATE testcases_PHengLEIv3d0_Active SET is_worked=2,run_time=0,result_evaluation_ori='',result_evaluation_pre='' WHERE test_case_id="+test_case_id;
-    UPDATE_CASE_NUM_SQL_WITHERROR = "UPDATE case_tests SET result_over=result_over-1,errorcase_num=errorcase_num-1 WHERE test_id="+test_id;
-    UPDATE_CASE_NUM_SQL_WITHOUTERROR = "UPDATE case_tests SET result_over=result_over-1 WHERE test_id="+test_id;
+    UPDATE_CASE_NUM_SQL_WITHERROR = "";
+    UPDATE_CASE_NUM_SQL_WITHOUTERROR = "";
+    RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR = reAction(test_id,type,'restart')
+    if(test_case_id) {
+        const data = await query(RESTART_SQL);
+        if(is_error_case){
+            casedata = await query(UPDATE_CASE_NUM_SQL_WITHERROR);
+            if(data && data.status && data.status === 200 && casedata && casedata.status && casedata.status === 200) {
+                ctx.body = {
+                    status: 200,
+                    msg: "重算成功",
+                };
+            } else {
+                ctx.body = data;
+            }
+        }
+        else{
+            casedata = await query(UPDATE_CASE_NUM_SQL_WITHOUTERROR);
+            if(data && data.status && data.status === 200 && casedata && casedata.status && casedata.status === 200) {
+                ctx.body = {
+                    status: 200,
+                    msg: "重算成功",
+                };
+            } else {
+                ctx.body = data;
+            }
+        }
+    }else{
+        ctx.body = {
+            status: 404,
+            msg: "未设置test_id",
+        };
+    }
+});
+
+// 重分析
+router.post('/reanalysis', async ctx => {
+    const res = ctx.request.body;
+    const { test_case_id = 0, is_error_case = false, test_id = 0 ,type="system"} = res;
+    RESTART_SQL,UPDATE_CASE_NUM_SQL_WITHERROR,UPDATE_CASE_NUM_SQL_WITHOUTERROR = reAction(test_id,type,'reanalysis')
     if(test_case_id) {
         const data = await query(RESTART_SQL);
         if(is_error_case){

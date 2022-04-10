@@ -4,15 +4,15 @@ import '@@/core/devScripts';
 import { plugin } from './core/plugin';
 import './core/pluginRegister';
 import { createHistory } from './core/history';
-import { ApplyPluginsType } from 'C:/lxc/web/phenglei_atp/frontend/node_modules/umi/node_modules/@umijs/runtime';
-import { renderClient } from 'C:/lxc/web/phenglei_atp/frontend/node_modules/umi/node_modules/@umijs/renderer-react';
+import { ApplyPluginsType } from 'D:/helei/programs/phengleiatpweb/frontend/node_modules/umi/node_modules/@umijs/runtime';
+import { renderClient } from 'D:/helei/programs/phengleiatpweb/frontend/node_modules/@umijs/renderer-react';
 import { getRoutes } from './core/routes';
 
 
 
 (() => {
   // Runtime block add component
-  window.GUmiUIFlag = require('C:/lxc/web/phenglei_atp/frontend/node_modules/@umijs/plugin-ui-blocks/lib/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
+  window.GUmiUIFlag = require('D:/helei/programs/phengleiatpweb/frontend/node_modules/@umijs/plugin-ui-blocks/lib/sdk/flagBabelPlugin/GUmiUIFlag.js').default;
 
   // Enable/Disable block add edit mode
   window.addEventListener(
@@ -72,7 +72,7 @@ export default clientRender();
 
 
     window.g_umi = {
-      version: '3.5.2',
+      version: '3.5.21',
     };
   
 
@@ -83,9 +83,9 @@ export default clientRender();
         if (isIE) return;
 
         // Umi UI Bubble
-        require('C:/lxc/web/phenglei_atp/frontend/node_modules/@umijs/preset-ui/lib/bubble').default({
+        require('D:/helei/programs/phengleiatpweb/frontend/node_modules/@umijs/preset-ui/lib/bubble').default({
           port: 3000,
-          path: 'C:/lxc/web/phenglei_atp/frontend',
+          path: 'D:/helei/programs/phengleiatpweb/frontend',
           currentProject: '',
           isBigfish: undefined,
         });

@@ -169,6 +169,11 @@ router.post('/restart', async ctx => {
     }
 });
 
+router.post('/webhook', async ctx => {
+    const res = ctx.request.body;
+    console.log(rea);
+});
+
 // 重分析
 router.post('/reanalysis', async ctx => {
     const res = ctx.request.body;

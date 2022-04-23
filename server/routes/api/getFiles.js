@@ -5,6 +5,7 @@ const archiver = require('archiver')
 // const staticResultPath = "/home/helei/ATP/case_test/";
 const path = require('path')
 const staticResultPath = path.join(process.cwd(),"ATPCases/");
+const staticErrorInfoPath = path.join(process.cwd(),"ErrorInfos/");
 const sleep = require('sleep-promise');
 
 
@@ -46,6 +47,17 @@ router.get('/checkResultsDirExists', async ctx => {
     }
 });
 
+
+router.get('/getLoadFile', async ctx => {
+    const filename = ctx.request.query.filename;
+    
+    if (fs.existsSync(path.join(staticErrorInfoPath,filename))) {
+        const fileContent = fs.readFileSync(path.join(staticErrorInfoPath,filename), "binary");
+        ctx.body = {status:200,msg:'Get file success.',content:fileContent};
+    } else {
+        ctx.body =  {status:404,msg:'The file does not exist.'};
+    }
+});
 // router.get('/getResults', async ctx => {
 //     const req_query = ctx.request.query;
 //     const case_name = req_query.case_name;

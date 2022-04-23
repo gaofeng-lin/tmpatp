@@ -80,7 +80,6 @@ router.get('/checkShouldDownload', async ctx => {
     const data = await query(CHECKSQL);
     ctx.body = data;
 });
-
 // 改变状态
 router.get('/applydownload', async ctx => {
     const res = ctx.request.query;

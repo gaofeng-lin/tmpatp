@@ -12,7 +12,7 @@ import fileDownload from 'js-file-download';
 import qs from 'qs';
 
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2678397_812ws4egpsu.js',
+  scriptUrl: '//at.alicdn.com/t/font_2678397_35g8z815xs7.js',
 });
 
 const excludeFileLists = ["turb_0.dat","turb.dat","flow_0.dat","tecflow.plt.bak","log0.log","preversion","sentinel"]

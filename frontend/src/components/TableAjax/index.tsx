@@ -1,18 +1,26 @@
 import React from "react";
 import styles from "./index.less";
-import { Table, Tooltip, Drawer, Space } from "antd";
+import { Table, Tooltip, Drawer, Space,notification } from "antd";
 import reqwest from "reqwest";
-import { PlusOutlined } from '@ant-design/icons';
 import moment from "moment";
 import { history } from 'umi';
-// import CaseList  from "../CaseListDrawer"
+import { createFromIconfontCN } from '@ant-design/icons';
+import ModelCard from "../ModelCard";
 
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_2678397_35g8z815xs7.js',
+});
 class App extends React.Component {
   state = {
     data: [],
     loading: false,
     showAddCaseDrawer: false,
     currentTestId: 0,
+    visible:false,
+    infoTitle:'',
+    tabList:[],
+    activeTabKey:'',
+    contentList:[],
     // CaseListLoading:false,
     // CaseListData:[],
     // selectedRowKeys:[]
@@ -66,7 +74,7 @@ class App extends React.Component {
       dataIndex: "state",
       align: "center",
       width: 180,
-      render: (value: any) => { return this.formatterResults(value) },
+      render: (value: number,record:any) => { return this.formatterResults(value,record) },
       filters: [
         {
           text: '不通过',
@@ -151,7 +159,7 @@ class App extends React.Component {
 
   ];
 
-  formatterResults = (val: Number) => {
+  formatterResults = (val: Number,record:any) => {
     let spanCompent = null
     switch (val) {
       case 0:
@@ -166,7 +174,7 @@ class App extends React.Component {
 
         break;
       case 3:
-        spanCompent = <span style={{ color: "red" }}>不通过</span>
+        spanCompent = <a onClick={() => this.fetchShowErrorInfo(record)}><span style={{ color: "red" }}>不通过<IconFont style={{fontSize:18}} type="icon-iconsearch-copy" /></span></a>
 
         break;
       default:
@@ -182,11 +190,11 @@ class App extends React.Component {
       return <span>{val}</span>
   }
 
-  formatterTime = (val) => {
+  formatterTime = (val:any) => {
     return val ? moment(val).format("YYYY-MM-DD HH:mm:ss") : ""
   }
 
-  linkToSystemCaseInfo(record) {
+  linkToSystemCaseInfo(record:any) {
     history.push({
       pathname: '/systemcaseinfo',
       query: {
@@ -197,7 +205,7 @@ class App extends React.Component {
     });
   }
 
-  linkToIntegrationCaseInfo(record) {
+  linkToIntegrationCaseInfo(record:any) {
     history.push({
       pathname: '/integrationcaseinfo',
       query: {
@@ -221,10 +229,78 @@ class App extends React.Component {
   //   });
   // };
 
-  handleAddCase(record: any) {
-    this.showAddCaseDrawer(record.test_id)
+  // handleAddCase(record: any) {
+  //   this.showAddCaseDrawer(record.test_id)
+  // }
+  fetchShowErrorInfo(record: any) {
+    this.setState({ loading: true });
+    let errorLog = "";
+    let makeLog = "";
+    reqwest({
+      url: "/api/getLoadFile",
+      method: "get",
+      data:{filename:record.solver_version+"_makeError.log"}
+    }).then((data:any) => {
+      if(data.status == 200){
+        errorLog = data.content;
+        reqwest({
+          url: "/api/getLoadFile",
+          method: "get",
+          data:{filename:record.solver_version+"_make.log"}
+        }).then((data2:any) => {
+          if(data2.status == 200){
+            makeLog = data2.content;
+            const infoTitle = 'test'
+            const tabList = [
+              {
+                key: 'MakeError',
+                tab: 'MakeError',
+              },
+              {
+                key: 'Make',
+                tab: 'Make',
+              },
+            ];
+            
+            const activeTabKey = 'MakeError';
+            const contentList = {
+              MakeError: <p>{errorLog}</p>,
+              Make: <p>{makeLog}</p>,
+            };
+            
+            this.setState({
+              loading: false,
+              visible:true,
+              infoTitle:infoTitle,
+              tabList:tabList,
+              activeTabKey:activeTabKey,
+              contentList:contentList,
+            })
+          }else{
+            this.setState({
+              loading: false
+            });
+            this.openErrorInfoNotification();
+            return;
+          }
+        });
+      }else{
+        this.setState({
+          loading: false
+        });
+        this.openErrorInfoNotification();
+        return;
+      }
+    });
   }
-
+  
+  openErrorInfoNotification() {
+    notification.open({
+      message: `错误`,
+      description:'错误日志不存在.',
+      duration: 2,
+    });
+  }
   componentDidMount() {
     this.fetch();
   }
@@ -233,37 +309,13 @@ class App extends React.Component {
     this.fetch();
   };
 
-  // fetchCaseList = (test_id:Number) => {
-  //   this.setState({ CaseListLoading: true });
-  //   reqwest({
-  //     url: "/api/searchCaseList",
-  //     method: "get",
-  //     type: "json",
-  //     data:{test_id:test_id}
-  //   }).then((data:any) => {
-  //     let rowKeys: any[] = [];
-  //     for( let unit in data.results ){
-  //       let case_exists = data.results[unit]["case_exists"];
-  //       console.log(case_exists,test_id,case_exists == test_id)
-  //       if(case_exists != 0 && case_exists == test_id)
-  //         rowKeys.push( data.results[unit]["case_id"]);
-  //     }
-  //     console.log(rowKeys)
-  //     this.setState({
-  //       CaseListLoading: false,
-  //       CaseListData: data.results,
-  //       selectedRowKeys:rowKeys
-  //     });
-  //   });
-  // };
-
   fetch = () => {
     this.setState({ loading: true });
     reqwest({
       url: "/api/search",
       method: "get",
       type: "json"
-    }).then((data) => {
+    }).then((data:any) => {
       this.setState({
         loading: false,
         data: data.results
@@ -272,6 +324,18 @@ class App extends React.Component {
   };
 
   render() {
+    let ModalCardShow;
+    if(this.state.visible)
+      ModalCardShow = <ModelCard
+                        afterClose={()=>this.setState({visible:false})}
+                        visible={true}
+                        infoTitle={this.state.infoTitle} 
+                        tabList={this.state.tabList}
+                        activeTabKey={this.state.activeTabKey}
+                        contentList={this.state.contentList}
+                      />
+    else
+      ModalCardShow = <></>
     return (
       <>
         <Table
@@ -285,17 +349,7 @@ class App extends React.Component {
           pagination={{ defaultPageSize: 20, showQuickJumper: true }}
           bordered
         />
-        {/* <CaseList 
-        loading={this.state.CaseListLoading}
-        selectedRowKeys={this.state.selectedRowKeys}
-        data={this.state.CaseListData}
-        test_id={this.state.currentTestId}
-        title="Add Case"
-        placement="right"
-        closable={false}
-        onClose={this.closeAddCaseDrawer}
-        visible={this.state.showAddCaseDrawer}
-      /> */}
+        {ModalCardShow}
       </>
     );
   }

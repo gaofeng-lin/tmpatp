@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./index.less";
 import { Table, Tooltip, Drawer, Space,notification } from "antd";
-import reqwest from "reqwest";
+import axios from "axios";
 import moment from "moment";
 import { history } from 'umi';
 import { createFromIconfontCN } from '@ant-design/icons';
@@ -236,20 +236,32 @@ class App extends React.Component {
     this.setState({ loading: true });
     let errorLog = "";
     let makeLog = "";
-    reqwest({
+    axios({
       url: "/api/getLoadFile",
       method: "get",
-      data:{filename:record.solver_version+"_makeError.log"}
+      params:{filename:record.solver_version+"_makeError.log"}
     }).then((data:any) => {
-      if(data.status == 200){
-        errorLog = data.content;
-        reqwest({
+      if(data.data?.status == 404){
+        this.setState({
+          loading: false
+        });
+        this.openErrorInfoNotification();
+        return;
+      }else{
+        errorLog = data.data;
+        axios({
           url: "/api/getLoadFile",
           method: "get",
-          data:{filename:record.solver_version+"_make.log"}
+          params:{filename:record.solver_version+"_make.log"}
         }).then((data2:any) => {
-          if(data2.status == 200){
-            makeLog = data2.content;
+          if(data2.data?.status == 404){
+            this.setState({
+              loading: false
+            });
+            this.openErrorInfoNotification();
+            return;
+          }else{
+            makeLog = data2.data;
             const infoTitle = 'test'
             const tabList = [
               {
@@ -267,7 +279,7 @@ class App extends React.Component {
               MakeError: <p>{errorLog}</p>,
               Make: <p>{makeLog}</p>,
             };
-            
+
             this.setState({
               loading: false,
               visible:true,
@@ -276,20 +288,8 @@ class App extends React.Component {
               activeTabKey:activeTabKey,
               contentList:contentList,
             })
-          }else{
-            this.setState({
-              loading: false
-            });
-            this.openErrorInfoNotification();
-            return;
           }
         });
-      }else{
-        this.setState({
-          loading: false
-        });
-        this.openErrorInfoNotification();
-        return;
       }
     });
   }
@@ -311,14 +311,13 @@ class App extends React.Component {
 
   fetch = () => {
     this.setState({ loading: true });
-    reqwest({
+    axios({
       url: "/api/search",
-      method: "get",
-      type: "json"
+      method: "get"
     }).then((data:any) => {
       this.setState({
         loading: false,
-        data: data.results
+        data: data.data.results
       });
     });
   };

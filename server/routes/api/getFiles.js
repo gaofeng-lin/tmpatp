@@ -52,8 +52,9 @@ router.get('/getLoadFile', async ctx => {
     const filename = ctx.request.query.filename;
     
     if (fs.existsSync(path.join(staticErrorInfoPath,filename))) {
-        const fileContent = fs.readFileSync(path.join(staticErrorInfoPath,filename), "binary");
-        ctx.body = {status:200,msg:'Get file success.',content:fileContent};
+        const fileContent = fs.readFileSync(path.join(staticErrorInfoPath,filename));
+        ctx.body = fileContent;
+        ctx.type = 'text/plain';
     } else {
         ctx.body =  {status:404,msg:'The file does not exist.'};
     }

@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./index.less";
 import { Table, Tooltip,PageHeader,Space,notification } from "antd";
 import axios from "axios";
-import rwquest from "rwquest";
 import { history } from 'umi';
 //import { VerticalAlignBottomOutlined,RedoOutlined } from "@ant-design/icons";
 import { createFromIconfontCN } from '@ant-design/icons';

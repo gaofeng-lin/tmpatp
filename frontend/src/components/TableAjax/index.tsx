@@ -1,4 +1,4 @@
-import React from "react";
+import {React,Component} from "react";
 import styles from "./index.less";
 import { Table, Tooltip, Drawer, Space,notification } from "antd";
 import axios from "axios";
@@ -10,22 +10,39 @@ import ModelCard from "../ModelCard";
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2678397_35g8z815xs7.js',
 });
-class App extends React.Component {
-  state = {
-    data: [],
-    loading: false,
-    showAddCaseDrawer: false,
-    currentTestId: 0,
-    visible:false,
-    infoTitle:'',
-    tabList:[],
-    activeTabKey:'',
-    contentList:[],
-    // CaseListLoading:false,
-    // CaseListData:[],
-    // selectedRowKeys:[]
-  };
+export interface TableProps {
+  data: any,
+  branchFilters :any,
+}
 
+export interface TableState {
+  data: any,
+  loading: boolean,
+  currentTestId: number,
+  visible:boolean,
+  infoTitle:string,
+  tabList:any,
+  activeTabKey:string,
+  contentList:any,
+  branchFilters :any,
+}
+
+class TableAjax extends Component<TableProps, TableState> {
+  constructor(props: TableProps) {
+    super(props);
+    this.state = { 
+      data: this.props.data,
+      loading: false,
+      currentTestId: 0,
+      visible:false,
+      infoTitle:'',
+      tabList:[],
+      activeTabKey:'',
+      contentList:[],
+      branchFilters:this.props.branchFilters
+    };
+  }
+  
   columns = [
     {
       title: "序号",
@@ -45,7 +62,9 @@ class App extends React.Component {
       title: "分支",
       dataIndex: "branchName",
       width: 120,
-      render: (value: any) => { return this.formatterBranch(value) }
+      render: (value: any) => { return this.formatterBranch(value) },
+      filters: this.props.branchFilters,
+      onFilter: (value, record) => (record.branchName).toString().indexOf(value) === 0,
     },
     {
       title: "更新者",
@@ -158,7 +177,7 @@ class App extends React.Component {
     },
 
   ];
-
+  
   formatterResults = (val: Number,record:any) => {
     let spanCompent = null
     switch (val) {
@@ -308,7 +327,7 @@ class App extends React.Component {
   handleTableChange = () => {
     this.fetch();
   };
-
+  
   fetch = () => {
     this.setState({ loading: true });
     axios({
@@ -317,7 +336,7 @@ class App extends React.Component {
     }).then((data:any) => {
       this.setState({
         loading: false,
-        data: data.data.results
+        data: data.data.results,
       });
     });
   };
@@ -354,10 +373,4 @@ class App extends React.Component {
   }
 }
 
-export default () => (
-  <div className={styles.container}>
-    <div id="components-table-demo-ajax">
-      <App />
-    </div>
-  </div>
-);
+export default TableAjax;

@@ -2,6 +2,7 @@
 import { Components } from "antd/lib/date-picker/generatePicker";
 import axios from "axios";
 import TableAjax from '../components/TableAjax';
+
 export default function IndexPage() {
   
   let branchFilters:any = [];

@@ -83,7 +83,13 @@ class App extends React.Component {
       children: [
         {
           dataIndex: "result_evaluation_ori",
+          title: "ori",
           width: 140,
+          filters:[
+            {text:'异常',value:'异常'},
+          ],
+          onFilter: (value:any,record:any) => (record.result_evaluation_ori).toString().indexOf('OK') != 0,
+         
           render: (value: any) => {
             return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> :value=="Terrible"?<span style={{ color: "#1890ff" }}>{value}</span>: <span>{value}</span>
           }
@@ -91,6 +97,12 @@ class App extends React.Component {
         {
           dataIndex: "result_evaluation_pre",
           width: 140,
+          title: "pre",
+          filters:[
+            {text:'异常',value:'异常'},
+          ],
+          onFilter: (value:any,record:any) => (record.result_evaluation_ori).toString().indexOf('OK') != 0,
+         
           render: (value: any) => {
             return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> :value=="Terrible"?<span style={{ color: "#1890ff" }}>{value}</span>: <span>{value}</span>
           }

@@ -85,6 +85,10 @@ class App extends React.Component {
         {
           dataIndex: "result_evaluation_ori",
           width: 140,
+          filters:[
+            {text:'异常',value:'异常'},
+          ],
+          onFilter: (value:any,record:any) => (record.result_evaluation_ori).toString().indexOf('OK') != 0,
           render: (value: any) => {
             return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> :value=="Terrible"?<span style={{ color: "#1890ff" }}>{value}</span>: <span>{value}</span>
           }
@@ -92,6 +96,10 @@ class App extends React.Component {
         {
           dataIndex: "result_evaluation_pre",
           width: 140,
+          filters:[
+            {text:'异常',value:'异常'},
+          ],
+          onFilter: (value:any,record:any) => (record.result_evaluation_ori).toString().indexOf('OK') != 0,
           render: (value: any) => {
             return value?.indexOf("Error") != -1 ? <span style={{ color: "red" }}>{value}</span> :value=="Terrible"?<span style={{ color: "#1890ff" }}>{value}</span>: <span>{value}</span>
           }
@@ -229,7 +237,7 @@ class App extends React.Component {
     if(search == ""){
       return {test_id:0,solver_version:0,commit:""}
     }
-    const searchParams = {test_id:Number,solver_version:Number,commit:String}
+    const searchParams:any = {test_id:Number,solver_version:Number,commit:String}
     const searchStr = search[0] == "?"?search.substring(1):search
     const searchArr = searchStr.length ? searchStr.split('&') : []
     searchArr.forEach(item => {

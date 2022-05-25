@@ -6,6 +6,8 @@ import moment from "moment";
 import { history } from 'umi';
 import { createFromIconfontCN } from '@ant-design/icons';
 import ModelCard from "../ModelCard";
+import type { PaginationProps } from 'antd';
+import {localStorageSet} from '../Storage';
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2678397_35g8z815xs7.js',
@@ -13,6 +15,7 @@ const IconFont = createFromIconfontCN({
 export interface TableProps {
   data: any,
   branchFilters :any,
+  curPage:number,
 }
 
 export interface TableState {
@@ -25,6 +28,7 @@ export interface TableState {
   activeTabKey:string,
   contentList:any,
   branchFilters :any,
+  curPage:number,
 }
 
 class TableAjax extends Component<TableProps, TableState> {
@@ -39,7 +43,8 @@ class TableAjax extends Component<TableProps, TableState> {
       tabList:[],
       activeTabKey:'',
       contentList:[],
-      branchFilters:this.props.branchFilters
+      branchFilters:this.props.branchFilters,
+      curPage:this.props.curPage
     };
   }
   
@@ -328,6 +333,11 @@ class TableAjax extends Component<TableProps, TableState> {
     this.fetch();
   };
   
+  handlePageChange: PaginationProps['onChange'] = page =>{
+    this.setState({curPage:page})
+    localStorageSet("tablePage",page)
+  }
+
   fetch = () => {
     this.setState({ loading: true });
     axios({
@@ -354,6 +364,9 @@ class TableAjax extends Component<TableProps, TableState> {
                       />
     else
       ModalCardShow = <></>
+
+    console.log(this.state);
+    
     return (
       <>
         <Table
@@ -364,7 +377,12 @@ class TableAjax extends Component<TableProps, TableState> {
           onChange={this.handleTableChange}
           rowKey="idsolver_info"
           tableLayout="auto"
-          pagination={{ defaultPageSize: 20, showQuickJumper: true }}
+          pagination={{ 
+            defaultPageSize: 20, 
+            defaultCurrent:this.state.curPage,
+            showQuickJumper: true ,
+            onChange:this.handlePageChange
+          }}
           bordered
         />
         {ModalCardShow}

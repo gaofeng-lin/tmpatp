@@ -2,9 +2,9 @@
 import { Components } from "antd/lib/date-picker/generatePicker";
 import axios from "axios";
 import TableAjax from '../components/TableAjax';
-
+import {localStorageGet} from '../components/Storage';
 export default function IndexPage() {
-  
+  const curPage = localStorageGet("tablePage") | 1;
   let branchFilters:any = [];
   let tableData:any;
   axios({
@@ -23,7 +23,7 @@ export default function IndexPage() {
   });
   return (
     <div>
-      <TableAjax data={tableData}  branchFilters={branchFilters}/>
+      <TableAjax data={tableData}  branchFilters={branchFilters} curPage={curPage}/>
     </div>
   );
 }

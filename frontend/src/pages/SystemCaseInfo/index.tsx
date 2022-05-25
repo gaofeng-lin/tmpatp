@@ -10,6 +10,7 @@ import { Breadcrumb } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import fileDownload from 'js-file-download';
 import qs from 'qs';
+import moment from "moment";
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2678397_35g8z815xs7.js',
@@ -47,6 +48,12 @@ class App extends React.Component {
           {address}
         </Tooltip>
       ),
+    },
+    {
+      title: "测试时间",
+      dataIndex: "end_time",
+      width: 200,
+      render: (value: any) => { return this.formatterTime(value) }
     },
     {
       title: "运行时间(h:m)",
@@ -137,7 +144,9 @@ class App extends React.Component {
       }
     }
   ];
-
+  formatterTime= (val:any)=> { 
+    return val ? moment(val).format("YYYY-MM-DD HH:mm:ss") : ""
+  }
   /**
  * 格式化秒
  * @param int  value 总秒数

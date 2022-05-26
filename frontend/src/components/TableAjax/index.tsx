@@ -8,6 +8,8 @@ import { createFromIconfontCN } from '@ant-design/icons';
 import ModelCard from "../ModelCard";
 import type { PaginationProps } from 'antd';
 import {localStorageSet} from '../Storage';
+import { Input } from 'antd';
+const { TextArea } = Input;
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2678397_35g8z815xs7.js',
@@ -286,7 +288,7 @@ class TableAjax extends Component<TableProps, TableState> {
             return;
           }else{
             makeLog = data2.data;
-            const infoTitle = 'test'
+            const infoTitle = '错误日志'
             const tabList = [
               {
                 key: 'MakeError',
@@ -297,11 +299,13 @@ class TableAjax extends Component<TableProps, TableState> {
                 tab: 'Make',
               },
             ];
-            
             const activeTabKey = 'MakeError';
+            console.log(errorLog);
+            console.log(makeLog);
+            
             const contentList = {
-              MakeError: <p>{errorLog}</p>,
-              Make: <p>{makeLog}</p>,
+              MakeError: <TextArea value={errorLog} autoSize={{ minRows: 9, maxRows: 9 }} bordered={false}/>,
+              Make: <TextArea value={makeLog}  autoSize={{ minRows: 9, maxRows: 9 }} bordered={false}/>,
             };
 
             this.setState({

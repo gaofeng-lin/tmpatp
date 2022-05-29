@@ -28,6 +28,7 @@ router.get('/searchSystemCaseInfo', async ctx => {
                         t1.project_dirpath,
                         t2.case_name,
                         t1.run_time,
+                        t1.end_time,
                         t1.is_worked,
                         t1.state,
                         t1.result_evaluation_ori,
@@ -55,6 +56,7 @@ router.get('/searchIntegrationCaseInfo', async ctx => {
                         t1.run_time,
                         t1.is_worked,
                         t1.state,
+                        t1.end_time,
                         t1.result_evaluation_ori,
                         t1.result_evaluation_pre
                         FROM

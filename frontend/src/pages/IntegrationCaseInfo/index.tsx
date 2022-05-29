@@ -12,7 +12,7 @@ import qs from 'qs';
 import moment from "moment";
 
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2678397_35g8z815xs7.js',
+  scriptUrl: '//at.alicdn.com/t/font_2678397_dlwzhe20mt8.js',
 });
 
 const excludeFileLists = ["turb_0.dat","turb.dat","flow_0.dat","tecflow.plt.bak","log0.log","preversion","sentinel"]
@@ -136,12 +136,12 @@ class App extends React.Component {
           </Tooltip>
         }else if(record.state == 1){
           button = <Tooltip placement="top" title="正在处理">
-            <a onClick={()=>this.handleCheckDownload(record)}><IconFont style={{fontSize:18}} type="icon-cloud-sync" /></a>
+            <a onClick={()=>this.handleCheckDownload(record)}><IconFont style={{fontSize:18}} type="icon-cloud-sync-green" /></a>
           </Tooltip>
         }
         else if(record.state == 2){
           button = <Tooltip placement="top" title="下载结果">
-            <a onClick={()=>this.handleDownloadResults(record)}><IconFont style={{fontSize:16}} type="icon-direction-down-circle" /></a>
+            <a onClick={()=>this.handleDownloadResults(record)}><IconFont style={{fontSize:16}} type="icon-direction-down-circle-red" /></a>
           </Tooltip>
         }
         return <Space size='middle'>

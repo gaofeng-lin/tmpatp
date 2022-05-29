@@ -12,7 +12,7 @@ import { Input } from 'antd';
 const { TextArea } = Input;
 
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2678397_35g8z815xs7.js',
+  scriptUrl: '//at.alicdn.com/t/font_2678397_dlwzhe20mt8.js',
 });
 export interface TableProps {
   data: any,

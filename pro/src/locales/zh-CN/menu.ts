@@ -1,0 +1,15 @@
+export default {
+  'menu.home': '首页',
+  'menu.resultsManager': '编译测试',
+  'menu.resultsCaseInfo': '版本详情',
+  'menu.caseManager': '算例管理',
+  'menu.caseManager.Index': '算例库',
+  'menu.jobManager': '作业管理',
+  'menu.result.success': '成功页',
+  'menu.result.fail': '失败页',
+  'menu.exception': '异常页',
+  'menu.exception.not-permission': '403',
+  'menu.exception.not-find': '404',
+  'menu.exception.server-error': '500',
+  'menu.exception.trigger': '触发错误',
+};

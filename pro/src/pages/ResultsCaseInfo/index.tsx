@@ -330,9 +330,9 @@ const ResultCaseInfo: React.FC = () => {
           title: 'pre',
           filters: [{ text: '异常', value: '异常' }],
           onFilter: (value: any, record: any) => {
-            return record.result_evaluation_ori == null
+            return record.result_evaluation_pre == null
               ? true
-              : record.result_evaluation_ori.toString().indexOf('OK') != 0;
+              : record.result_evaluation_pre.toString().indexOf('OK') != 0;
           },
           render: (value: any) => {
             return value?.indexOf('Error') != -1 ? (

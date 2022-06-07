@@ -40,8 +40,8 @@ const CaseIndex: React.FC = () => {
       hideInForm: true,
     },
     {
-      title: <FormattedMessage id="pages.jobManager.starttime" defaultMessage="End Time" />,
-      dataIndex: 'end_time',
+      title: <FormattedMessage id="pages.jobManager.starttime" defaultMessage="Start Time" />,
+      dataIndex: 'start_time',
       width: 200,
       valueType: 'dateTime',
     },

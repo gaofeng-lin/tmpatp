@@ -290,7 +290,7 @@ router.get('/getRunningJobs', async ctx => {
     getRunningJobsSQL = ""
     if (type == "systemCase")
         getRunningJobsSQL = `SELECT
-            t1.test_case_id,t2.solver_version,t3.case_name,t1.end_time
+            t1.test_case_id,t2.solver_version,t3.case_name,t1.start_time
         FROM
         testcases_system_cdcloud AS t1
         LEFT JOIN case_tests AS t2 ON t1.test_id = t2.test_id
@@ -301,7 +301,7 @@ router.get('/getRunningJobs', async ctx => {
             t1.test_case_id DESC`;
     else if (type == "integrationCase")
         getRunningJobsSQL = `SELECT
-            t1.test_case_id,t2.solver_version,t3.case_name,t1.end_time
+            t1.test_case_id,t2.solver_version,t3.case_name,t1.start_time
         FROM
         testcases_PHengLEIv3d0_Active AS t1
         LEFT JOIN case_tests AS t2 ON t1.test_id = t2.test_id

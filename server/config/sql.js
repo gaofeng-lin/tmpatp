@@ -41,5 +41,40 @@ const QUERY_CASE_LIST = `SELECT
                         ) AS t2 ON t1.case_id = t2.case_id
                         `;
 
+const QUERY_INTEGRATIONCASES_INFO = `SELECT * FROM cases`;
+const QUERY_SYSTEMCASES_INFO = `SELECT * FROM cases_system`;
 
-module.exports = { QUERY_SOLVER_INFO ,QUERY_CASE_LIST};
+const QUERY_INTEGRATIONCASES_INFO_BYID =`SELECT
+                                t2.solver_version,
+                                t1.result_evaluation_ori,
+                                t1.result_evaluation_pre,
+                                t1.run_time
+                                FROM
+                                testcases_PHengLEIv3d0_Active AS t1
+                                LEFT JOIN case_tests AS t2 ON t1.test_id = t2.test_id
+                                WHERE
+                                case_id=?
+                                ORDER BY
+	                            t2.solver_version DESC`;
+
+const QUERY_SYSTEMCASES_INFO_BYID =`SELECT
+                                t2.solver_version,
+                                t1.result_evaluation_ori,
+                                t1.result_evaluation_pre,
+                                t1.run_time
+                                FROM
+                                testcases_system_cdcloud AS t1
+                                LEFT JOIN case_tests AS t2 ON t1.test_id = t2.test_id
+                                WHERE
+                                case_id=?
+                                ORDER BY
+	                            t2.solver_version DESC`;
+
+module.exports = { 
+    QUERY_SOLVER_INFO ,
+    QUERY_CASE_LIST,
+    QUERY_INTEGRATIONCASES_INFO,
+    QUERY_SYSTEMCASES_INFO,
+    QUERY_INTEGRATIONCASES_INFO_BYID,
+    QUERY_SYSTEMCASES_INFO_BYID,
+};

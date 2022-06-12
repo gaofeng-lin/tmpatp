@@ -2,7 +2,7 @@
 const MYSQL_CONFIG = {
   host: 'localhost',
   user: 'root',
-  password: '123456',
+  password: 'root',
   database: 'case_test'
 };
 module.exports = MYSQL_CONFIG;

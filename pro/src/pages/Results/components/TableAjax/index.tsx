@@ -295,6 +295,7 @@ const ResultIndex: React.FC<TableProps> = (props) => {
           </Button>,
         ]}
         visible={isModalVisible}
+        closable={false}
         afterClose={aftercloseModel}
       >
         <FileInfoBox

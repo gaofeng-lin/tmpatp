@@ -1,9 +1,8 @@
 import RightContent from '@/components/RightContent';
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
-import { SettingDrawer } from '@ant-design/pro-layout';
 import type { RunTimeLayoutConfig } from 'umi';
 import defaultSettings from '../config/defaultSettings';
-
+const { REACT_APP_ENV } = process.env;
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
@@ -19,6 +18,8 @@ export async function getInitialState(): Promise<{
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+  console.log(REACT_APP_ENV);
+
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
@@ -27,12 +28,12 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态
-    childrenRender: (children, props) => {
+    childrenRender: (children) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
         <>
           {children}
-          {!props.location?.pathname?.includes('/login') && (
+          {/* {
             <SettingDrawer
               disableUrlParams
               enableDarkTheme
@@ -44,7 +45,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
                 }));
               }}
             />
-          )}
+          } */}
         </>
       );
     },

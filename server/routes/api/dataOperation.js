@@ -21,6 +21,7 @@ router.get('/searchCases', async ctx => {
     const request = ctx.request;
     const req_type = request.query.type;
     let QUERYSTR="";
+    console.log("req_type: ",req_type)
     if(req_type=="integrationCase")
         QUERYSTR = QUERY_INTEGRATIONCASES_INFO
     if(req_type=="systemCase")

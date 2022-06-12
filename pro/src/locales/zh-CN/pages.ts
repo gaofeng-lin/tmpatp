@@ -36,4 +36,10 @@ export default {
   'pages.jobManager.case_name': '算例名称',
   'pages.jobManager.starttime': '开始时间',
   'pages.jobManager.actions': '操作',
+
+  'pages.productManager': '产品管理',
+  'pages.productManager.id': '产品号',
+  'pages.productManager.name': '产品名称',
+  'pages.productManager.brief': '产品简介',
+  'pages.productManager.solver_version': '版本号',
 };

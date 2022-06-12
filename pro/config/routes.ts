@@ -33,6 +33,12 @@
     component: './Jobs',
   },
   {
+    name: 'productManager',
+    // icon: 'icon-icon-jobs',
+    path: '/products',
+    component: './Products',
+  },
+  {
     path: '/',
     redirect: '/results',
   },

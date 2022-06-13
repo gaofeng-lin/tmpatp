@@ -58,19 +58,19 @@ for (let i = 0; i < 5; i += 1) {
 
 const columns: ProColumns<TableListItem>[] = [
   {
-    title: '产品名称',
+    title: '应用名称',
     width: 120,
     dataIndex: 'name',
     render: (_) => <a>{_}</a>,
   },
   {
-    title: '解算器版本',
+    title: '状态',
     width: 120,
     dataIndex: 'status',
     render: (_, record) => <Tag color={record.status.color}>{record.status.text}</Tag>,
   },
   {
-    title: '产品说明',
+    title: '容器数量',
     width: 120,
     dataIndex: 'containers',
     align: 'right',
@@ -120,63 +120,32 @@ const columns: ProColumns<TableListItem>[] = [
     ],
   },
 ];
-let paramdata: any = [];
-let productdata: any = [];
+
 const expandedRowRender = () => {
+  const data: any = [];
 
-  // for (let i = 0; i < 3; i += 1) {
-  //   data.push({
-  //     key: i,
-  //     date: '2014-12-24 23:12:00',
-  //     name: 'This is production name',
-  //     upgradeNum: 'Upgraded: 56',
-  //   });
-  // }
-
-  // paramdata[0] = {paramName:'999', varType:'int', varName:'paraone', varValue:100};
-
-//   data.push({
-//     paramName: '参数1', 
-//     varType:'int', 
-//     varName:'paraone', 
-//     varValue:100,
-// });
-
-  request('api/testdb', {
+  request('/api/testdb', {
     method: 'get',
-  }).then((data1: any) => {
-    // console.log(data1.param)
-    // console.log(data1.product)
-    data1.param.map((item: any) => {
-      paramdata.push(item)
-      console.log(item)
+  }).then((res: any) => {
+    res.param.map((item: object) => {
+      data.push(item)
     })
   })
 
-  console.log(paramdata)
 
-
-
+  console.log(data)
   return (
     <ProTable
       columns={[
         { title: '参数名', dataIndex: 'param_name', key: 'param_name' },
         { title: '变量类型', dataIndex: 'var_type', key: 'var_type' },
         { title: '变量名', dataIndex: 'var_name', key: 'var_name' },
-
-
-        {
-          title: '变量值',
-          dataIndex: 'var_value',
-          key: 'var_value',
-          // valueType: 'option',
-          // render: () => [<a key="Pause">Pause</a>, <a key="Stop">Stop</a>],
-        },
+        { title: '变量值', dataIndex: 'var_value', key: 'var_value' },
       ]}
       headerTitle={false}
       search={false}
       options={false}
-      dataSource={paramdata}
+      dataSource={data}
       pagination={false}
     />
   );
@@ -188,7 +157,7 @@ export default () => {
       columns={columns}
       request={(params, sorter, filter) => {
         // 表单搜索项会从 params 传入，传递给后端接口。
-        console.log(params, sorter, filter);
+        // console.log(params, sorter, filter);
         return Promise.resolve({
           data: tableListDataSource,
           success: true,

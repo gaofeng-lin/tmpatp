@@ -37,7 +37,7 @@ const testQuery = (sql, values) => {
             if (err) {
                 reject(err);
             } else {
-                // connection.release();
+                connection.end()
                 resolve({
                     status: 200,
                     results

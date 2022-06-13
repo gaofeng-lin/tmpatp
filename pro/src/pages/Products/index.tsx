@@ -130,6 +130,8 @@ const expandedRowRender = () => {
     res.param.map((item: object) => {
       data.push(item)
     })
+  }).catch(function(err: any) {
+    console.error(err)
   })
 
 

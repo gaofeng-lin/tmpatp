@@ -1,211 +1,218 @@
+import { DownOutlined, EllipsisOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
-import { EditableProTable, ProCard, ProFormField, ProFormRadio } from '@ant-design/pro-components';
-import React, { useState } from 'react';
+import { ProTable } from '@ant-design/pro-components';
+import { Button, Tag, Tooltip } from 'antd';
+import { request } from 'umi';
+import React from 'react';
 
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
+export type Status = {
+  color: string;
+  text: string;
+};
+
+const statusMap = {
+  0: {
+    color: 'blue',
+    text: '进行中',
+  },
+  1: {
+    color: 'green',
+    text: '已完成',
+  },
+  2: {
+    color: 'volcano',
+    text: '警告',
+  },
+  3: {
+    color: 'red',
+    text: '失败',
+  },
+  4: {
+    color: '',
+    text: '未完成',
+  },
+};
+
+export type TableListItem = {
+  key: number;
+  name: string;
+  containers: number;
+  creator: string;
+  status: Status;
+  createdAt: number;
+};
+const tableListDataSource: TableListItem[] = [];
+
+const creators = ['付小小', '曲丽丽', '林东东', '陈帅帅', '兼某某'];
+
+for (let i = 0; i < 5; i += 1) {
+  tableListDataSource.push({
+    key: i,
+    name: 'AppName',
+    containers: Math.floor(Math.random() * 20),
+    creator: creators[Math.floor(Math.random() * creators.length)],
+    status: statusMap[Math.floor(Math.random() * 10) % 5],
+    createdAt: Date.now() - Math.floor(Math.random() * 100000),
   });
-};
+}
 
-type DataSourceType = {
-  id: React.Key;
-  title?: string;
-  readonly?: string;
-  decs?: string;
-  state?: string;
-  created_at?: string;
-  update_at?: string;
-  children?: DataSourceType[];
-};
-
-const defaultData: DataSourceType[] = [
+const columns: ProColumns<TableListItem>[] = [
   {
-    id: 624748504,
-    title: '活动名称一',
-    readonly: '活动名称一',
-    decs: '这个活动真好玩',
-    state: 'open',
-    created_at: '2020-05-26T09:42:56Z',
-    update_at: '2020-05-26T09:42:56Z',
+    title: '产品名称',
+    width: 120,
+    dataIndex: 'name',
+    render: (_) => <a>{_}</a>,
   },
   {
-    id: 624691229,
-    title: '活动名称二',
-    readonly: '活动名称二',
-    decs: '这个活动真好玩',
-    state: 'closed',
-    created_at: '2020-05-26T08:19:22Z',
-    update_at: '2020-05-26T08:19:22Z',
+    title: '解算器版本',
+    width: 120,
+    dataIndex: 'status',
+    render: (_, record) => <Tag color={record.status.color}>{record.status.text}</Tag>,
+  },
+  {
+    title: '产品说明',
+    width: 120,
+    dataIndex: 'containers',
+    align: 'right',
+    sorter: (a, b) => a.containers - b.containers,
+  },
+
+  {
+    title: '创建者',
+    width: 120,
+    dataIndex: 'creator',
+    valueEnum: {
+      all: { text: '全部' },
+      付小小: { text: '付小小' },
+      曲丽丽: { text: '曲丽丽' },
+      林东东: { text: '林东东' },
+      陈帅帅: { text: '陈帅帅' },
+      兼某某: { text: '兼某某' },
+    },
+  },
+  {
+    title: (
+      <>
+        创建时间
+        <Tooltip placement="top" title="这是一段描述">
+          <QuestionCircleOutlined style={{ marginLeft: 4 }} />
+        </Tooltip>
+      </>
+    ),
+    width: 140,
+    key: 'since',
+    dataIndex: 'createdAt',
+    valueType: 'date',
+    sorter: (a, b) => a.createdAt - b.createdAt,
+  },
+  {
+    title: '操作',
+    width: 164,
+    key: 'option',
+    valueType: 'option',
+    render: () => [
+      <a key="1">链路</a>,
+      <a key="2">报警</a>,
+      <a key="3">监控</a>,
+      <a key="4">
+        <EllipsisOutlined />
+      </a>,
+    ],
   },
 ];
+let paramdata: any = [];
+let productdata: any = [];
+const expandedRowRender = () => {
 
-export default () => {
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
-  const [dataSource, setDataSource] = useState<DataSourceType[]>([]);
-  const [position, setPosition] = useState<'top' | 'bottom' | 'hidden'>('bottom');
+  // for (let i = 0; i < 3; i += 1) {
+  //   data.push({
+  //     key: i,
+  //     date: '2014-12-24 23:12:00',
+  //     name: 'This is production name',
+  //     upgradeNum: 'Upgraded: 56',
+  //   });
+  // }
 
-  const columns: ProColumns<DataSourceType>[] = [
-    {
-      title: '活动名称',
-      dataIndex: 'title',
-      tooltip: '只读，使用form.getFieldValue获取不到值',
-      formItemProps: (form, { rowIndex }) => {
-        return {
-          rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : [],
-        };
-      },
-      // 第一行不允许编辑
-      editable: (text, record, index) => {
-        return index !== 0;
-      },
-      width: '15%',
-    },
-    {
-      title: '活动名称二',
-      dataIndex: 'readonly',
-      tooltip: '只读，使用form.getFieldValue可以获取到值',
-      readonly: true,
-      width: '15%',
-    },
-    {
-      title: '状态',
-      key: 'state',
-      dataIndex: 'state',
-      valueType: 'select',
-      valueEnum: {
-        all: { text: '全部', status: 'Default' },
-        open: {
-          text: '未解决',
-          status: 'Error',
-        },
-        closed: {
-          text: '已解决',
-          status: 'Success',
-        },
-      },
-    },
-    {
-      title: '描述',
-      dataIndex: 'decs',
-      fieldProps: (from, { rowKey, rowIndex }) => {
-        if (from.getFieldValue([rowKey || '', 'title']) === '不好玩') {
-          return {
-            disabled: true,
-          };
-        }
-        if (rowIndex > 9) {
-          return {
-            disabled: true,
-          };
-        }
-        return {};
-      },
-    },
-    {
-      title: '活动时间',
-      dataIndex: 'created_at',
-      valueType: 'date',
-    },
-    {
-      title: '操作',
-      valueType: 'option',
-      width: 200,
-      render: (text, record, _, action) => [
-        <a
-          key="editable"
-          onClick={() => {
-            action?.startEditable?.(record.id);
-          }}
-        >
-          编辑
-        </a>,
-        <a
-          key="delete"
-          onClick={() => {
-            setDataSource(dataSource.filter((item) => item.id !== record.id));
-          }}
-        >
-          删除
-        </a>,
-      ],
-    },
-  ];
+  // paramdata[0] = {paramName:'999', varType:'int', varName:'paraone', varValue:100};
+
+//   data.push({
+//     paramName: '参数1', 
+//     varType:'int', 
+//     varName:'paraone', 
+//     varValue:100,
+// });
+
+  request('api/testdb', {
+    method: 'get',
+  }).then((data1: any) => {
+    // console.log(data1.param)
+    // console.log(data1.product)
+    data1.param.map((item: any) => {
+      paramdata.push(item)
+      console.log(item)
+    })
+  })
+
+  console.log(paramdata)
+
+
 
   return (
-    <>
-      <EditableProTable<DataSourceType>
-        rowKey="id"
-        headerTitle="可编辑表格"
-        maxLength={5}
-        scroll={{
-          x: 960,
-        }}
-        recordCreatorProps={
-          position !== 'hidden'
-            ? {
-                position: position as 'top',
-                record: () => ({ id: (Math.random() * 1000000).toFixed(0) }),
-              }
-            : false
-        }
-        loading={false}
-        toolBarRender={() => [
-          <ProFormRadio.Group
-            key="render"
-            fieldProps={{
-              value: position,
-              onChange: (e) => setPosition(e.target.value),
-            }}
-            options={[
-              {
-                label: '添加到顶部',
-                value: 'top',
-              },
-              {
-                label: '添加到底部',
-                value: 'bottom',
-              },
-              {
-                label: '隐藏',
-                value: 'hidden',
-              },
-            ]}
-          />,
-        ]}
-        columns={columns}
-        request={async () => ({
-          data: defaultData,
-          total: 3,
+    <ProTable
+      columns={[
+        { title: '参数名', dataIndex: 'param_name', key: 'param_name' },
+        { title: '变量类型', dataIndex: 'var_type', key: 'var_type' },
+        { title: '变量名', dataIndex: 'var_name', key: 'var_name' },
+
+
+        {
+          title: '变量值',
+          dataIndex: 'var_value',
+          key: 'var_value',
+          // valueType: 'option',
+          // render: () => [<a key="Pause">Pause</a>, <a key="Stop">Stop</a>],
+        },
+      ]}
+      headerTitle={false}
+      search={false}
+      options={false}
+      dataSource={paramdata}
+      pagination={false}
+    />
+  );
+};
+
+export default () => {
+  return (
+    <ProTable<TableListItem>
+      columns={columns}
+      request={(params, sorter, filter) => {
+        // 表单搜索项会从 params 传入，传递给后端接口。
+        console.log(params, sorter, filter);
+        return Promise.resolve({
+          data: tableListDataSource,
           success: true,
-        })}
-        value={dataSource}
-        onChange={setDataSource}
-        editable={{
-          type: 'multiple',
-          editableKeys,
-          onSave: async (rowKey, data, row) => {
-            console.log(rowKey, data, row);
-            await waitTime(2000);
-          },
-          onChange: setEditableRowKeys,
-        }}
-      />
-      {/* <ProCard title="表格数据" headerBordered collapsible defaultCollapsed>
-        <ProFormField
-          ignoreFormItem
-          fieldProps={{
-            style: {
-              width: '100%',
-            },
-          }}
-          mode="read"
-          valueType="jsonCode"
-          text={JSON.stringify(dataSource)}
-        />
-      </ProCard> */}
-    </>
+        });
+      }}
+      rowKey="key"
+      pagination={{
+        showQuickJumper: true,
+      }}
+      expandable={{ expandedRowRender }}
+      search={false}
+      dateFormatter="string"
+      headerTitle="嵌套表格"
+      options={false}
+      toolBarRender={() => [
+        <Button key="show">查看日志</Button>,
+        <Button key="out">
+          导出数据
+          <DownOutlined />
+        </Button>,
+        <Button key="primary" type="primary">
+          创建应用
+        </Button>,
+      ]}
+    />
   );
 };

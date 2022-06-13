@@ -1,6 +1,23 @@
 const router = require('koa-router')()
 const { query } = require('../../config/pool');
-const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYSTEMCASES_INFO } = require('../../config/sql');
+const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYSTEMCASES_INFO,QUERY_TEST,QUERY_PRODUCT } = require('../../config/sql');
+const {test} = require('../../config/testdb');
+const {testQuery} = require('../../config/testdb');
+
+
+router.get('/testdb', async ctx => {
+
+    var res = {};
+    
+
+    const dataParam = await testQuery(QUERY_TEST);
+    const dataProduct = await testQuery(QUERY_PRODUCT);
+    
+    res.param = dataParam.results;
+    res.product = dataProduct.results;
+    ctx.body = res;
+});
+
 
 //查询
 // 测试时可简单创建 string: name, number: id, 自增主键id
@@ -345,6 +362,8 @@ router.post('/cancelJobs', async ctx => {
         };
     }
 });
+
+
 
 
 module.exports = router;

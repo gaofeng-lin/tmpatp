@@ -70,6 +70,10 @@ const QUERY_SYSTEMCASES_INFO_BYID =`SELECT
                                 ORDER BY
 	                            t2.solver_version DESC`;
 
+const QUERY_TEST = `SELECT param_name, var_type,var_name,var_value FROM person_param`;
+
+const QUERY_PRODUCT = `SELECT product_name,cfdversion,product_info FROM products`;
+
 module.exports = { 
     QUERY_SOLVER_INFO ,
     QUERY_CASE_LIST,
@@ -77,4 +81,6 @@ module.exports = {
     QUERY_SYSTEMCASES_INFO,
     QUERY_INTEGRATIONCASES_INFO_BYID,
     QUERY_SYSTEMCASES_INFO_BYID,
+    QUERY_TEST,
+    QUERY_PRODUCT,
 };

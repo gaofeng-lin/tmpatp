@@ -113,3 +113,12 @@ export async function getTestdb(params = {}) {
     params,
   });
 }
+
+
+export async function getTestProduct(params = {}) {
+  return request('/api/testproduct', {
+    method: 'GET',
+    params,
+  });
+}
+

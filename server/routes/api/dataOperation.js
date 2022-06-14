@@ -1,41 +1,33 @@
 const router = require('koa-router')()
 const { query } = require('../../config/pool');
-const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYSTEMCASES_INFO,QUERY_TEST,QUERY_PRODUCT } = require('../../config/sql');
+const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYSTEMCASES_INFO,QUERY_PARAMS,QUERY_PRODUCT } = require('../../config/sql');
 const {test} = require('../../config/testdb');
 const {testQuery} = require('../../config/testdb');
 
 
-router.get('/testdb', async ctx => {
+//查询产品表
+router.get('/testproduct', async ctx => {
+    var res = [];
+    const data = await testQuery(QUERY_PRODUCT);
+    for (var i = 0; i < data.results.length; i++) {
+        data.results[i].key = i+1
+        res[i] = data.results[i];
+    }
 
-    // var res = {};
-    
+    console.log(res)
+    ctx.body = res
 
-    // const dataParam = await testQuery(QUERY_TEST);
-    // const dataProduct = await testQuery(QUERY_PRODUCT);
-    
-    // const results = dataParam.results;
-    // let data = [];
-    // for(let i = 0; i < results.length; i++) {
-    //     data.push({
-    //         key: i,
-    //         param_name: results[i].param_name,
-    //         var_type: results[i].var_type,
-    //         var_name: results[i].var_name,
-    //         var_value: results[i].var_value,
-    //     });
-    // }
-    // res.data = data;
-    // res.product = dataProduct.results;
+});
+
+//查询参数表表
+router.get('/testparam', async ctx => {
+
 
     var res = {};
-    
 
-    const dataParam = await testQuery(QUERY_TEST);
-    const dataProduct = await testQuery(QUERY_PRODUCT);
-    
-    res.param = dataParam.results;
-    res.product = dataProduct.results;
-    ctx.body = res;
+    const dataParam = await testQuery(QUERY_PARAMS);
+    ctx.body = dataParam
+
 });
 
 

@@ -3,7 +3,7 @@ import { dateArrayFormatter, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Tag, Tooltip } from 'antd';
 import { request } from 'umi';
-import {getTestdb} from  '@/services/api/api';
+import {getTestdb, getTestProduct} from  '@/services/api/api';
 import React from 'react';
 
 export type Status = {
@@ -36,89 +36,77 @@ const statusMap = {
 
 export type TableListItem = {
   key: number;
-  name: string;
-  containers: number;
-  creator: string;
-  status: Status;
-  createdAt: number;
+  product_id: number;
+  product_name: string;
+  solver_num: number;
+  product_info: string;
 };
 const tableListDataSource: TableListItem[] = [];
 
 const creators = ['付小小', '曲丽丽', '林东东', '陈帅帅', '兼某某'];
 
-for (let i = 0; i < 5; i += 1) {
-  tableListDataSource.push({
-    key: i,
-    name: 'AppName',
-    containers: Math.floor(Math.random() * 20),
-    creator: creators[Math.floor(Math.random() * creators.length)],
-    status: statusMap[Math.floor(Math.random() * 10) % 5],
-    createdAt: Date.now() - Math.floor(Math.random() * 100000),
-  });
-}
+// for (let i = 0; i < 5; i += 1) {
+//   tableListDataSource.push({
+//     key: i,
+//     name: 'AppName',
+//     containers: Math.floor(Math.random() * 20),
+//     creator: creators[Math.floor(Math.random() * creators.length)],
+//     status: statusMap[Math.floor(Math.random() * 10) % 5],
+//     createdAt: Date.now() - Math.floor(Math.random() * 100000),
+//   });
+// }
+
+request('/api/testproduct', {
+  method: 'get',
+}).then((data: any) => {
+  console.log(data)
+  tableListDataSource.push(data)
+})
+
+console.log(tableListDataSource)
+
+// tableListDataSource[0] = {
+//   product_id: 1,
+//   product_name: "风雷1",
+//   solver_num: 5720,
+//   product_info: '使用了算法1',
+//   key: 1,
+//    }
+
+//   tableListDataSource[1] = {
+//   key: 2,
+//   product_id: 2,
+//   product_name: "风雷2",
+//   solver_num: 5720,
+//   product_info: '使用了算法2',
+// }
 
 const columns: ProColumns<TableListItem>[] = [
   {
-    title: '应用名称',
+    title: '产品编号',
     width: 120,
-    dataIndex: 'name',
+    dataIndex: 'product_id',
     render: (_) => <a>{_}</a>,
   },
   {
-    title: '状态',
+    title: '产品名称',
     width: 120,
-    dataIndex: 'status',
-    render: (_, record) => <Tag color={record.status.color}>{record.status.text}</Tag>,
+    dataIndex: 'product_name',
+    render: (_, record) => <a>{_}</a>,
   },
   {
-    title: '容器数量',
+    title: '解算器版本号',
     width: 120,
-    dataIndex: 'containers',
+    dataIndex: 'solver_num',
     align: 'right',
-    sorter: (a, b) => a.containers - b.containers,
+    sorter: (a, b) => a.solver_num - b.solver_num,
   },
 
   {
-    title: '创建者',
+    title: '产品说明',
     width: 120,
-    dataIndex: 'creator',
-    valueEnum: {
-      all: { text: '全部' },
-      付小小: { text: '付小小' },
-      曲丽丽: { text: '曲丽丽' },
-      林东东: { text: '林东东' },
-      陈帅帅: { text: '陈帅帅' },
-      兼某某: { text: '兼某某' },
-    },
-  },
-  {
-    title: (
-      <>
-        创建时间
-        <Tooltip placement="top" title="这是一段描述">
-          <QuestionCircleOutlined style={{ marginLeft: 4 }} />
-        </Tooltip>
-      </>
-    ),
-    width: 140,
-    key: 'since',
-    dataIndex: 'createdAt',
-    valueType: 'date',
-    sorter: (a, b) => a.createdAt - b.createdAt,
-  },
-  {
-    title: '操作',
-    width: 164,
-    key: 'option',
-    valueType: 'option',
-    render: () => [
-      <a key="1">链路</a>,
-      <a key="2">报警</a>,
-      <a key="3">监控</a>,
-      <a key="4">
-        <EllipsisOutlined />
-      </a>,
-    ],
+    dataIndex: 'product_info',
+    render: (_, record) => <a>{_}</a>,
   },
 ];
 
@@ -134,25 +122,25 @@ const expandedRowRender = () => {
       headerTitle={false}
       search={false}
       options={false}
-      request={async () => {
-        const msg = await getTestdb();
-        const results =msg.param;
-        let data = [];
-        for(let i = 0; i < results.length; i++) {
-            data.push({
-                key: i,
-                param_name: results[i].param_name,
-                var_type: results[i].var_type,
-                var_name: results[i].var_name,
-                var_value: results[i].var_value,
-            });
-        }
-        return {
-          data: data,
-          success: true,
-        };
-        }
-      }
+      // request={async () => {
+      //   const msg = await getTestdb();
+      //   const results =msg.param;
+      //   let data = [];
+      //   for(let i = 0; i < results.length; i++) {
+      //       data.push({
+      //           key: i,
+      //           param_name: results[i].param_name,
+      //           var_type: results[i].var_type,
+      //           var_name: results[i].var_name,
+      //           var_value: results[i].var_value,
+      //       });
+      //   }
+      //   return {
+      //     data: data,
+      //     success: true,
+      //   };
+      //   }
+      // }
       pagination={false}
     />
   );
@@ -162,13 +150,27 @@ export default () => {
   return (
     <ProTable<TableListItem>
       columns={columns}
-      request={(params, sorter, filter) => {
-        // 表单搜索项会从 params 传入，传递给后端接口。
-        // console.log(params, sorter, filter);
-        return Promise.resolve({
-          data: tableListDataSource,
+      // request={(params, sorter, filter) => {
+      //   // 表单搜索项会从 params 传入，传递给后端接口。
+      //   // console.log(params, sorter, filter);
+      //   return Promise.resolve({
+      //     data: tableListDataSource,
+      //     success: true,
+      //   });
+      // }}
+
+      request={async () => {
+
+        const msg = await getTestProduct();
+        let data:any = [];
+        msg.map((item: any) => {
+          data.push(item)
+        })
+
+        return{
+          data:data,
           success: true,
-        });
+        }
       }}
       rowKey="key"
       pagination={{
@@ -177,7 +179,7 @@ export default () => {
       expandable={{ expandedRowRender }}
       search={false}
       dateFormatter="string"
-      headerTitle="嵌套表格"
+      headerTitle="产品管理"
       options={false}
       toolBarRender={() => [
         <Button key="show">查看日志</Button>,

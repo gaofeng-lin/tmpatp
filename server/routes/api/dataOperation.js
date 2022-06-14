@@ -7,29 +7,19 @@ const {testQuery} = require('../../config/testdb');
 
 //查询产品表
 router.get('/testproduct', async ctx => {
-    var res = [];
     const data = await testQuery(QUERY_PRODUCT);
-    for (var i = 0; i < data.results.length; i++) {
-        data.results[i].key = i+1
-        res[i] = data.results[i];
-    }
-
-    ctx.body = res
+    ctx.body = {data}
 
 });
 
 //查询参数表表
 router.get('/testparam', async ctx => {
-    var res = [];
-    const data = await testQuery(QUERY_PARAMS);
-    var index = 0;
-    for (var i = 0; i < data.results.length; i++) {
-        data.results[i].key = i+1
-        res[i] = data.results[i];
-    }
-
-    console.log(res)
-    ctx.body = res
+    
+    const product_id = ctx.request.query.product_id;
+    const SQL = 'SELECT * from  person_param where product_id='+product_id;
+    console.log(SQL);
+    const data = await testQuery(SQL);
+    ctx.body = {data}
 
 });
 

@@ -17,7 +17,6 @@ router.get('/testparam', async ctx => {
     
     const product_id = ctx.request.query.product_id;
     const SQL = 'SELECT * from  person_param where product_id='+product_id;
-    console.log(SQL);
     const data = await testQuery(SQL);
     ctx.body = {data}
 

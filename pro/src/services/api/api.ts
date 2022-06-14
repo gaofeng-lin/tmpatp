@@ -107,8 +107,8 @@ export async function getResults(filename = '') {
 }
 
 
-export async function getTestdb(params = {}) {
-  return request('/api/testdb', {
+export async function getTestParam(params = {}) {
+  return request('/api/testparam', {
     method: 'GET',
     params,
   });

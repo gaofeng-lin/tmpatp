@@ -74,7 +74,7 @@ const QUERY_SYSTEMCASES_INFO_BYID =`SELECT
 
 const QUERY_PRODUCT = `SELECT * FROM products`;
 
-const QUERY_PARAMS = `SELECT products.product_id, person_param.var_type,person_param.var_name,person_param.var_value FROM products LEFT JOIN person_param on
+const QUERY_PARAMS = `SELECT products.product_id,person_param.param_name ,person_param.var_type,person_param.var_name,person_param.var_value FROM products LEFT JOIN person_param on
 products.product_id = person_param.product_id`;
 
 module.exports = { 

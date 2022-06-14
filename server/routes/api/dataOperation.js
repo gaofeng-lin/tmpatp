@@ -14,19 +14,22 @@ router.get('/testproduct', async ctx => {
         res[i] = data.results[i];
     }
 
-    console.log(res)
     ctx.body = res
 
 });
 
 //查询参数表表
 router.get('/testparam', async ctx => {
+    var res = [];
+    const data = await testQuery(QUERY_PARAMS);
+    var index = 0;
+    for (var i = 0; i < data.results.length; i++) {
+        data.results[i].key = i+1
+        res[i] = data.results[i];
+    }
 
-
-    var res = {};
-
-    const dataParam = await testQuery(QUERY_PARAMS);
-    ctx.body = dataParam
+    console.log(res)
+    ctx.body = res
 
 });
 

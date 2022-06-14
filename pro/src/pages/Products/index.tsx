@@ -3,7 +3,7 @@ import { dateArrayFormatter, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Tag, Tooltip } from 'antd';
 import { request } from 'umi';
-import {getTestdb, getTestProduct} from  '@/services/api/api';
+import {getTestParam, getTestProduct} from  '@/services/api/api';
 import React from 'react';
 
 export type Status = {
@@ -38,7 +38,7 @@ export type TableListItem = {
   key: number;
   product_id: number;
   product_name: string;
-  solver_num: number;
+  cfdversion: number;
   product_info: string;
 };
 const tableListDataSource: TableListItem[] = [];
@@ -68,7 +68,7 @@ console.log(tableListDataSource)
 // tableListDataSource[0] = {
 //   product_id: 1,
 //   product_name: "风雷1",
-//   solver_num: 5720,
+//   cfdversion: 5720,
 //   product_info: '使用了算法1',
 //   key: 1,
 //    }
@@ -77,7 +77,7 @@ console.log(tableListDataSource)
 //   key: 2,
 //   product_id: 2,
 //   product_name: "风雷2",
-//   solver_num: 5720,
+//   cfdversion: 5720,
 //   product_info: '使用了算法2',
 // }
 
@@ -97,9 +97,9 @@ const columns: ProColumns<TableListItem>[] = [
   {
     title: '解算器版本号',
     width: 120,
-    dataIndex: 'solver_num',
+    dataIndex: 'cfdversion',
     align: 'right',
-    sorter: (a, b) => a.solver_num - b.solver_num,
+    sorter: (a, b) => a.cfdversion - b.cfdversion,
   },
 
   {
@@ -122,25 +122,18 @@ const expandedRowRender = () => {
       headerTitle={false}
       search={false}
       options={false}
-      // request={async () => {
-      //   const msg = await getTestdb();
-      //   const results =msg.param;
-      //   let data = [];
-      //   for(let i = 0; i < results.length; i++) {
-      //       data.push({
-      //           key: i,
-      //           param_name: results[i].param_name,
-      //           var_type: results[i].var_type,
-      //           var_name: results[i].var_name,
-      //           var_value: results[i].var_value,
-      //       });
-      //   }
-      //   return {
-      //     data: data,
-      //     success: true,
-      //   };
-      //   }
-      // }
+      request={async () => {
+        const msg = await getTestParam();
+        let data:any = [];
+        msg.map((item: any) => {
+          data.push(item)
+        })
+        return {
+          data: data,
+          success: true,
+        };
+        }
+      }
       pagination={false}
     />
   );

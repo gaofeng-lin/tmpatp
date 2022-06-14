@@ -18,6 +18,7 @@ const Results: React.FC = () => {
       branchFilters.push({ text: item, value: item });
     });
   });
+  console.log(branchFilters[0])
   return (
     <PageContainer>
       <ResultIndex branchFilters={branchFilters} curPage={curPage} />

@@ -7,6 +7,26 @@ const {testQuery} = require('../../config/testdb');
 
 router.get('/testdb', async ctx => {
 
+    // var res = {};
+    
+
+    // const dataParam = await testQuery(QUERY_TEST);
+    // const dataProduct = await testQuery(QUERY_PRODUCT);
+    
+    // const results = dataParam.results;
+    // let data = [];
+    // for(let i = 0; i < results.length; i++) {
+    //     data.push({
+    //         key: i,
+    //         param_name: results[i].param_name,
+    //         var_type: results[i].var_type,
+    //         var_name: results[i].var_name,
+    //         var_value: results[i].var_value,
+    //     });
+    // }
+    // res.data = data;
+    // res.product = dataProduct.results;
+
     var res = {};
     
 

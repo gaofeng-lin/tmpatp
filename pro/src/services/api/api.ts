@@ -105,3 +105,11 @@ export async function getResults(filename = '') {
   a.click();
   a.remove();
 }
+
+
+export async function getTestdb(params = {}) {
+  return request('/api/testdb', {
+    method: 'GET',
+    params,
+  });
+}

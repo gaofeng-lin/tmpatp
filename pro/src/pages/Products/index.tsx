@@ -1,8 +1,9 @@
 import { DownOutlined, EllipsisOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import type { ProColumns } from '@ant-design/pro-components';
+import { dateArrayFormatter, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Tag, Tooltip } from 'antd';
 import { request } from 'umi';
+import {getTestdb} from  '@/services/api/api';
 import React from 'react';
 
 export type Status = {
@@ -122,20 +123,6 @@ const columns: ProColumns<TableListItem>[] = [
 ];
 
 const expandedRowRender = () => {
-  const data: any = [];
-
-  request('/api/testdb', {
-    method: 'get',
-  }).then((res: any) => {
-    res.param.map((item: object) => {
-      data.push(item)
-    })
-  }).catch(function(err: any) {
-    console.error(err)
-  })
-
-
-  console.log(data)
   return (
     <ProTable
       columns={[
@@ -147,7 +134,25 @@ const expandedRowRender = () => {
       headerTitle={false}
       search={false}
       options={false}
-      dataSource={data}
+      request={async () => {
+        const msg = await getTestdb();
+        const results =msg.param;
+        let data = [];
+        for(let i = 0; i < results.length; i++) {
+            data.push({
+                key: i,
+                param_name: results[i].param_name,
+                var_type: results[i].var_type,
+                var_name: results[i].var_name,
+                var_value: results[i].var_value,
+            });
+        }
+        return {
+          data: data,
+          success: true,
+        };
+        }
+      }
       pagination={false}
     />
   );

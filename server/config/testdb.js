@@ -47,5 +47,84 @@ const testQuery = (sql, values) => {
     })
 };
 
+function funcwait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-module.exports = { testQuery };
+async function sleep() {
+    await funcwait(3000);
+}
+
+const testInsertProduct = (addSql, addSqlParams) => {
+        var mysql      = require('mysql');
+        var connection = mysql.createConnection({
+          host     : 'localhost',
+          user     : 'root',
+          password : 'root',
+          database : 'phenglei'
+        });
+        connection.connect();
+        connection.query(addSql,addSqlParams,function (err, result) {
+            if(err){
+                console.log('[INSERT ERROR] - ',err.message);
+                return;
+            }        
+         console.log("插入成功")
+         
+    });
+     
+    connection.end();
+}
+
+
+const testGETMaxId = (sql, values) => {
+    return new Promise((resolve, reject) => {
+        var mysql      = require('mysql');
+        var connection = mysql.createConnection({
+          host     : 'localhost',
+          user     : 'root',
+          password : 'root',
+          database : 'phenglei'
+        });
+ 
+        connection.connect();
+        connection.query(sql, values, (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                connection.end()
+                resolve({
+                    results
+                });
+            }
+    });
+    })
+};
+
+
+
+const testInsertPersonParam = (addSql, addSqlParams) => {
+    var mysql      = require('mysql');
+    var connection = mysql.createConnection({
+      host     : 'localhost',
+      user     : 'root',
+      password : 'root',
+      database : 'phenglei'
+    });
+    connection.connect();
+    for (let i = 0; i < addSqlParams.length; i++) {
+        connection.query(addSql,addSqlParams[i],function (err, result) {
+            if(err){
+                console.log('[INSERT ERROR] - ',err.message);
+                return;
+                    }        
+                console.log("插入成功")
+        });
+    }
+
+ 
+connection.end();
+}
+
+
+module.exports = { testQuery, testInsertProduct, testInsertPersonParam,testGETMaxId };

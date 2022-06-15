@@ -2,7 +2,7 @@ const router = require('koa-router')()
 const { query } = require('../../config/pool');
 const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYSTEMCASES_INFO,QUERY_PARAMS,QUERY_PRODUCT } = require('../../config/sql');
 const {test} = require('../../config/testdb');
-const {testQuery} = require('../../config/testdb');
+const {testQuery, testInsertProduct, testInsertPersonParam, testGETMaxId} = require('../../config/testdb');
 
 
 //查询产品表
@@ -21,6 +21,44 @@ router.get('/testparam', async ctx => {
     ctx.body = {data}
 
 });
+
+// 产品信息写入参数表和产品表
+router.post('/testproductinfo', async ctx => {
+    const resq = ctx.request.body;
+
+    // 获取产品id
+    const SQL_MAX_ID = 'SELECT product_id FROM products ORDER BY product_id desc limit 1';
+    const resId = await testGETMaxId(SQL_MAX_ID);
+    const product_id = resId.results[0].product_id + 1
+
+    // 插入产品表的信息
+    const SQL_PRODUCT = 'INSERT INTO products (product_id,product_name,cfdversion,product_info) VALUES ('+product_id+',?,?,?)';
+    let productParams = [];
+    productParams[0] = resq.values.product_name;
+    productParams[1] = resq.values.cfdversion;
+    productParams[2] = resq.values.product_info;
+    testInsertProduct(SQL_PRODUCT, productParams);
+    
+
+    // 插入参数表信息
+    const SQL_PERSON_PARAM = 'INSERT INTO person_param (id,product_id,param_name,var_type,var_name,var_value) VALUES (0,?,?,?,?,?)';
+    let netArray = [];
+    let paramArray = [];
+    for (let i = 0; i < resq.values.dataSource.length; i++) {
+        netArray[0] = product_id;
+        netArray[1] = resq.values.dataSource[i].param_name;
+        netArray[2] = resq.values.dataSource[i].var_type;
+        netArray[3] = resq.values.dataSource[i].var_name;
+        netArray[4] = resq.values.dataSource[i].var_value;
+        paramArray.push(netArray); 
+        netArray = [];
+    }
+    console.log('参数数组是：')
+    console.log(paramArray);
+    testInsertPersonParam(SQL_PERSON_PARAM, paramArray);
+    const resp = 'success';
+    ctx.body = resp
+})
 
 
 //查询

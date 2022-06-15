@@ -122,3 +122,11 @@ export async function getTestProduct(params = {}) {
   });
 }
 
+export async function sendProductInfo(params = {}) {
+  console.log({...params})
+  return request('/api/testproductinfo', {
+    method: 'post',
+    data: {...params},
+  })
+}
+

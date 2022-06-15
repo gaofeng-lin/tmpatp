@@ -4,6 +4,7 @@ import { request } from 'umi';
 import { localStorageGet } from './components/Storage';
 import ResultIndex from './components/TableAjax';
 
+
 const Results: React.FC = () => {
   const curPage = localStorageGet('resultsTablePage') || 1;
   let branchFilters: any = [];

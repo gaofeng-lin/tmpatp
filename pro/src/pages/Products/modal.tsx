@@ -10,6 +10,7 @@ import {
 } from '@ant-design/pro-components';
 import { Button, message, Input } from 'antd';
 import React, {useState} from 'react';
+import {sendProductInfo} from  '@/services/api/api';
 
 const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -53,20 +54,8 @@ const waitTime = (time: number = 100) => {
     },
     {
       title: '变量类型',
-      key: 'state',
       dataIndex: 'var_type',
-      valueType: 'select',
-      valueEnum: {
-        all: { text: 'int', status: 'Default' },
-        open: {
-          text: 'string',
-          status: 'Error',
-        },
-        closed: {
-          text: 'double',
-          status: 'Success',
-        },
-      },
+      width: '20%',
     },
     {
       title: '变量名',
@@ -84,13 +73,16 @@ const waitTime = (time: number = 100) => {
     },
   ];
 
+  
+
+
 const MF = () => {
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     defaultData.map((item) => item.id),);
   return (
     <ModalForm<{
       name: string;
-      company: string;
+      product_name: string;
     }>
       title="添加产品"
       trigger={
@@ -102,6 +94,7 @@ const MF = () => {
       onFinish={async (values) => {
         await waitTime(2000);
         console.log(values);
+        sendProductInfo({values})
         message.success('提交成功');
       }}
       initialValues={{
@@ -110,13 +103,14 @@ const MF = () => {
       }}
     >
       <ProForm.Group>
-        <ProFormText width="md" name="company" label="产品名称" placeholder="请输入名称" />
+        <ProFormText width="md" name="product_name" label="产品名称" placeholder="请输入名称" />
+        <ProFormText width="md" name="product_info" label="产品说明" placeholder="请产品说明" />
       </ProForm.Group>
-      <ProFormText width="sm" name="id" label="解算器版本" />
+      <ProFormText width="sm" name="cfdversion" label="解算器版本" />
       <ProForm.Item
         label="参数添加"
         name="dataSource"
-        initialValue={defaultData}
+        // initialValue={defaultData}
         trigger="onValuesChange"
       >
         <EditableProTable<DataSourceType>
@@ -128,8 +122,8 @@ const MF = () => {
             position: 'top',
             record: () => ({
               id: Date.now(),
-              addonBefore: 'ccccccc',
-              decs: 'testdesc',
+              // addonBefore: 'ccccccc',
+              // decs: 'testdesc',
             }),
           }}
           editable={{

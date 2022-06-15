@@ -2,6 +2,7 @@ import type { ProColumns } from '@ant-design/pro-components';
 import { EditableProTable, ProTable, ProCard, ProFormField, ProFormRadio } from '@ant-design/pro-components';
 import React, { useState } from 'react';
 import PF from './form';
+import MF from './modal';
 
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
@@ -169,15 +170,13 @@ export default () => {
     );
   };
   
-  const addProduct = ():any => {
+  const addProduct = (): any => {
     // console.log('addProduct')
     // window.alert("hahah")
     return(
-      <div>
         <PF></PF>
-      </div>
-    )
-  }
+    );
+  };
   return (
     <>
       <EditableProTable<DataSourceType>
@@ -254,7 +253,12 @@ export default () => {
           text={JSON.stringify(dataSource)}
         />
       </ProCard>
-      <button type="button" onClick = {addProduct}>添加产品</button>
+      <div>
+      {/* <button type="button" onClick = {{addProduct}}>添加产品</button> */}
+          <MF></MF>
+    </div>
     </>
+
+    
   );
 };

@@ -47,34 +47,36 @@ const waitTime = (time: number = 100) => {
   
   const columns: ProColumns<DataSourceType>[] = [
     {
-      title: '活动名称',
-      dataIndex: 'title',
-      width: '30%',
+      title: '参数名',
+      dataIndex: 'param_name',
+      width: '20%',
     },
     {
-      title: '状态',
+      title: '变量类型',
       key: 'state',
-      dataIndex: 'state',
+      dataIndex: 'var_type',
       valueType: 'select',
       valueEnum: {
-        all: { text: '全部', status: 'Default' },
+        all: { text: 'int', status: 'Default' },
         open: {
-          text: '未解决',
+          text: 'string',
           status: 'Error',
         },
         closed: {
-          text: '已解决',
+          text: 'double',
           status: 'Success',
         },
       },
     },
     {
-      title: '描述',
-      dataIndex: 'decs',
-      renderFormItem: (_, { record }) => {
-        console.log('----===>', record);
-        return <Input addonBefore={(record as any)?.addonBefore} />;
-      },
+      title: '变量名',
+      dataIndex: 'var_name',
+      width: '20%',
+    },
+    {
+      title: '变量值',
+      dataIndex: 'var_value',
+      width: '20%',
     },
     {
       title: '操作',
@@ -108,18 +110,11 @@ const MF = () => {
       }}
     >
       <ProForm.Group>
-        <ProFormText
-          width="md"
-          name="name"
-          label="签约客户名称"
-          tooltip="最长为 24 位"
-          placeholder="请输入名称"
-        />
-        <ProFormText width="md" name="company" label="我方公司名称" placeholder="请输入名称" />
+        <ProFormText width="md" name="company" label="产品名称" placeholder="请输入名称" />
       </ProForm.Group>
-      <ProFormText width="sm" name="id" label="主合同编号" />
+      <ProFormText width="sm" name="id" label="解算器版本" />
       <ProForm.Item
-        label="数组数据"
+        label="参数添加"
         name="dataSource"
         initialValue={defaultData}
         trigger="onValuesChange"

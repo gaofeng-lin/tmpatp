@@ -1,264 +1,126 @@
-import type { ProColumns } from '@ant-design/pro-components';
-import { EditableProTable, ProTable, ProCard, ProFormField, ProFormRadio } from '@ant-design/pro-components';
-import React, { useState } from 'react';
-import PF from './form';
+import { DownOutlined, EllipsisOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { dateArrayFormatter, ProColumns } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
+import { Button, Tag, Tooltip } from 'antd';
+import { request } from 'umi';
+import {getTestParam, getTestProduct} from  '@/services/api/api';
+import React, {useState } from 'react';
 import MF from './modal';
 
-const waitTime = (time: number = 100) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, time);
-  });
+export type Status = {
+  color: string;
+  text: string;
 };
 
-type DataSourceType = {
-  id: React.Key;
-  title?: string;
-  readonly?: string;
-  decs?: string;
-  state?: string;
-  created_at?: string;
-  update_at?: string;
-  children?: DataSourceType[];
+export type TableListItem = {
+  key: number;
+  product_id: number;
+  product_name: string;
+  cfdversion: number;
+  product_info: string;
 };
+export default () => {
+  
+const [productId, setProductId] = useState(1);
 
-const defaultData: DataSourceType[] = [
+  
+const columns: ProColumns<TableListItem>[] = [
   {
-    id: 624748504,
-    title: '活动名称一',
-    readonly: '活动名称一',
-    decs: '这个活动真好玩',
-    state: 'open',
-    created_at: '2020-05-26T09:42:56Z',
-    update_at: '2020-05-26T09:42:56Z',
+    title: '产品编号',
+    width: 120,
+    dataIndex: 'product_id',
+    render: (_) => <a>{_}</a>,
   },
   {
-    id: 624691229,
-    title: '活动名称二',
-    readonly: '活动名称二',
-    decs: '这个活动真好玩',
-    state: 'closed',
-    created_at: '2020-05-26T08:19:22Z',
-    update_at: '2020-05-26T08:19:22Z',
+    title: '产品名称',
+    width: 120,
+    dataIndex: 'product_name',
+    render: (_, record) => <a>{_}</a>,
+  },
+  {
+    title: '解算器版本号',
+    width: 120,
+    dataIndex: 'cfdversion',
+    align: 'right',
+    sorter: (a, b) => a.cfdversion - b.cfdversion,
+  },
+
+  {
+    title: '产品说明',
+    width: 120,
+    dataIndex: 'product_info',
+    render: (_, record) => <a>{_}</a>,
   },
 ];
 
-export default () => {
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
-  const [dataSource, setDataSource] = useState<DataSourceType[]>([]);
-  const [position, setPosition] = useState<'top' | 'bottom' | 'hidden'>('bottom');
-
-  const columns: ProColumns<DataSourceType>[] = [
-    {
-      title: '活动名称',
-      dataIndex: 'title',
-      tooltip: '只读，使用form.getFieldValue获取不到值',
-      formItemProps: (form, { rowIndex }) => {
+const expandedRowRender = () => {
+  return (
+    <ProTable
+      params={{product_id: productId}}
+      columns={[
+        { title: '参数名', dataIndex: 'param_name', key: 'param_name' },
+        { title: '变量类型', dataIndex: 'var_type', key: 'var_type' },
+        { title: '变量名', dataIndex: 'var_name', key: 'var_name' },
+        { title: '变量值', dataIndex: 'var_value', key: 'var_value' },
+      ]}
+      headerTitle={false}
+      rowKey="id"
+      search={false}
+      options={false}
+      request={async (params) => {
+        const msg = await getTestParam(params);
         return {
-          rules: rowIndex > 1 ? [{ required: true, message: '此项为必填项' }] : [],
+          data: msg.data.results,
+          success: true,
         };
-      },
-      // 第一行不允许编辑
-      editable: (text, record, index) => {
-        return index !== 0;
-      },
-      width: '15%',
-    },
-    {
-      title: '活动名称二',
-      dataIndex: 'readonly',
-      tooltip: '只读，使用form.getFieldValue可以获取到值',
-      readonly: true,
-      width: '15%',
-    },
-    {
-      title: '状态',
-      key: 'state',
-      dataIndex: 'state',
-      valueType: 'select',
-      valueEnum: {
-        all: { text: '全部', status: 'Default' },
-        open: {
-          text: '未解决',
-          status: 'Error',
-        },
-        closed: {
-          text: '已解决',
-          status: 'Success',
-        },
-      },
-    },
-    {
-      title: '描述',
-      dataIndex: 'decs',
-      fieldProps: (from, { rowKey, rowIndex }) => {
-        if (from.getFieldValue([rowKey || '', 'title']) === '不好玩') {
-          return {
-            disabled: true,
-          };
         }
-        if (rowIndex > 9) {
-          return {
-            disabled: true,
-          };
-        }
-        return {};
-      },
-    },
-    {
-      title: '活动时间',
-      dataIndex: 'created_at',
-      valueType: 'date',
-    },
-    {
-      title: '操作',
-      valueType: 'option',
-      width: 200,
-      render: (text, record, _, action) => [
-        <a
-          key="editable"
-          onClick={() => {
-            action?.startEditable?.(record.id);
-          }}
-        >
-          编辑
-        </a>,
-        <a
-          key="delete"
-          onClick={() => {
-            setDataSource(dataSource.filter((item) => item.id !== record.id));
-          }}
-        >
-          删除
-        </a>,
-      ],
-    },
-  ];
+      }
+      pagination={false}
+    />
+  );
+};
 
-  const expandedRowRender = () => {
-    const data = [];
-    for (let i = 0; i < 3; i += 1) {
-      data.push({
-        key: i,
-        date: '2014-12-24 23:12:00',
-        name: 'This is production name',
-        upgradeNum: 'Upgraded: 56',
-      });
-    }
-    return (
-      <ProTable
-        columns={[
-          { title: 'Date', dataIndex: 'date', key: 'date' },
-          { title: 'Name', dataIndex: 'name', key: 'name' },
-  
-          { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-          {
-            title: 'Action',
-            dataIndex: 'operation',
-            key: 'operation',
-            valueType: 'option',
-            render: () => [<a key="Pause">Pause</a>, <a key="Stop">Stop</a>],
-          },
-        ]}
-        headerTitle={false}
-        search={false}
-        options={false}
-        dataSource={data}
-        pagination={false}
-      />
-    );
-  };
-  
-  const addProduct = (): any => {
-    // console.log('addProduct')
-    // window.alert("hahah")
-    return(
-        <PF></PF>
-    );
-  };
+const onExpandFn =(expanded: boolean, record: any)=>{
+  setProductId(record.product_id);
+}
+
   return (
     <>
-      <EditableProTable<DataSourceType>
-        rowKey="id"
-        headerTitle="可编辑表格"
-        maxLength={5}
-        scroll={{
-          x: 960,
-        }}
-        recordCreatorProps={
-          position !== 'hidden'
-            ? {
-                position: position as 'top',
-                record: () => ({ id: (Math.random() * 1000000).toFixed(0) }),
-              }
-            : false
-        }
-        loading={false}
-        toolBarRender={() => [
-          <ProFormRadio.Group
-            key="render"
-            fieldProps={{
-              value: position,
-              onChange: (e) => setPosition(e.target.value),
-            }}
-            options={[
-              {
-                label: '添加到顶部',
-                value: 'top',
-              },
-              {
-                label: '添加到底部',
-                value: 'bottom',
-              },
-              {
-                label: '隐藏',
-                value: 'hidden',
-              },
-            ]}
-          />,
-        ]}
+        <ProTable<TableListItem>
+      columns={columns}
+      request={async () => {
 
-
-        columns={columns}
-        request={async () => ({
-          data: defaultData,
-          total: 3,
+        const msg = await getTestProduct();
+        return{
+          data:msg.data.results,
           success: true,
-        })}
-        value={dataSource}
-        expandable={{ expandedRowRender }}
-        onChange={setDataSource}
-        editable={{
-          type: 'multiple',
-          editableKeys,
-          onSave: async (rowKey, data, row) => {
-            console.log(rowKey, data, row);
-            await waitTime(2000);
-          },
-          onChange: setEditableRowKeys,
-        }}
-        
-      />
-      <ProCard title="表格数据" headerBordered collapsible defaultCollapsed>
-        <ProFormField
-          ignoreFormItem
-          fieldProps={{
-            style: {
-              width: '100%',
-            },
-          }}
-          mode="read"
-          valueType="jsonCode"
-          text={JSON.stringify(dataSource)}
-        />
-      </ProCard>
-      <div>
-      {/* <button type="button" onClick = {{addProduct}}>添加产品</button> */}
-          <MF></MF>
-    </div>
+        }
+      }}
+      rowKey="product_id"
+      pagination={{
+        showQuickJumper: true,
+      }}
+      expandable={{ expandedRowRender }}
+      onExpand={onExpandFn}
+      search={false}
+      dateFormatter="string"
+      headerTitle="产品管理"
+      options={false}
+      toolBarRender={() => [
+        <Button key="show">查看日志</Button>,
+        <Button key="out">
+          导出数据
+          <DownOutlined />
+        </Button>,
+        <Button key="primary" type="primary">
+          创建应用
+        </Button>,
+      ]}
+    />
+        <div><MF></MF></div>
     </>
 
-    
+
+      
   );
 };

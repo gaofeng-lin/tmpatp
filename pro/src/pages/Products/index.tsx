@@ -74,6 +74,7 @@ const columns: ProColumns<TableListItem>[] = [
 ];
 
 const expandedRowRender = () => {
+  // const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   return (
     <ProTable
       params={{product_id: productId}}
@@ -82,6 +83,21 @@ const expandedRowRender = () => {
         { title: '变量类型', dataIndex: 'var_type', key: 'var_type' },
         { title: '变量名', dataIndex: 'var_name', key: 'var_name' },
         { title: '变量值', dataIndex: 'var_value', key: 'var_value' },
+        // {
+        //   title: '操作',
+        //   valueType: 'option',
+        //   width: 200,
+        //   render: (text, record, _, action) => [
+        //     <a
+        //       key="editable"
+        //       onClick={() => {
+        //         action?.startEditable?.(record.product_id);
+        //       }}
+        //     >
+        //       编辑
+        //     </a>,
+        //   ],
+        // },
       ]}
       headerTitle={false}
       rowKey="id"
@@ -96,6 +112,15 @@ const expandedRowRender = () => {
         }
       }
       pagination={false}
+      editable={{
+        type: 'multiple',
+        editableKeys,
+        onSave: async (rowKey, data, row) => {
+          console.log(rowKey, data, row);
+          await waitTime(2000);
+        },
+        onChange: setEditableRowKeys,
+      }}
     />
   );
 };

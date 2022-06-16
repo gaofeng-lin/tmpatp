@@ -137,3 +137,11 @@ export async function sendEditProduct(params = {}) {
     data: {...params},
   })
 }
+
+export async function sendEditParam(params = {}) {
+  console.log({...params})
+  return request('/api/sendeditparam', {
+    method: 'post',
+    data: {...params},
+  })
+}

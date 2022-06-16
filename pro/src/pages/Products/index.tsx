@@ -6,7 +6,7 @@ import { request, FormattedMessage } from 'umi';
 import {getTestParam, getTestProduct} from  '@/services/api/api';
 import React, {useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import {sendEditProduct} from  '@/services/api/api';
+import {sendEditProduct, sendEditParam} from  '@/services/api/api';
 import MF from './modal';
 
 export type Status = {
@@ -121,6 +121,8 @@ const expandedRowRender = () => {
         // editableKeys,
         onSave: async (rowKey, data, row) => {
           // console.log(rowKey, data, row);
+          console.log(data);
+          sendEditParam(data);
           await waitTime(2000);
         },
         // onChange: setEditableRowKeys,
@@ -168,8 +170,6 @@ const waitTime = (time: number = 100) => {
         type: 'multiple',
         editableKeys,
         onSave: async (rowKey, data, row) => {
-          console.log("data:");
-          console.log(data);
           sendEditProduct(data);
           await waitTime(2000);
         },

@@ -73,13 +73,27 @@ router.post('/sendeditproduct', async ctx => {
     updateParams[3] = resq.product_id;
     const SQL_UPDATE_PRODUCTS = 'UPDATE products SET product_name = ?,cfdversion = ?,product_info = ? where product_id = ?';
     updateProducts(SQL_UPDATE_PRODUCTS, updateParams);
-
-    // 更新函数
-    
-    console.log(updateParams);
     const resp = 'success';
     ctx.body = resp
 })
+
+// 更新产品信息
+router.post('/sendeditparam', async ctx => {
+    const resq = ctx.request.body;
+    const updateParams = [];
+    updateParams[0] =resq.param_name;
+    updateParams[1] = resq.var_type;
+    updateParams[2] = resq.var_name;
+    updateParams[3] = resq.var_value;
+    updateParams[4] = resq.id;
+    const SQL_UPDATE_PARAMS = 'UPDATE person_param SET param_name = ?,var_type = ?,var_name = ?,var_value = ? where id = ?';
+    updateProducts(SQL_UPDATE_PARAMS, updateParams);
+    
+    const resp = 'success';
+    ctx.body = resp
+})
+
+
 
 //查询
 // 测试时可简单创建 string: name, number: id, 自增主键id

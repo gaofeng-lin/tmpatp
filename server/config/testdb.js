@@ -8,19 +8,8 @@ var connection = mysql.createConnection({
  
 connection.connect();
  
-var sql = 'SELECT * FROM project';
 
-// const test = connection.query(sql,function (err, result) {
-//     if(err){
-//       console.log('[SELECT ERROR] - ',err.message);
-//       return;
-//     }
 
-//    console.log('--------------------------SELECT----------------------------');
-//    console.log(result);
-//    console.log('------------------------------------------------------------\n\n');  
-//    return result;
-// });
 
 const testQuery = (sql, values) => {
     return new Promise((resolve, reject) => {
@@ -127,7 +116,7 @@ connection.end();
 }
 
 
-const updateProducts = (updateSql, updateSqlParams) => {
+const updateProductsParams = (updateSql, updateSqlParams) => {
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
       host     : 'localhost',
@@ -150,4 +139,4 @@ connection.end();
 }
 
 module.exports = { testQuery, testInsertProduct, testInsertPersonParam,
-    testGETMaxId, updateProducts };
+    testGETMaxId, updateProductsParams };

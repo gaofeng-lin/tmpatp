@@ -72,9 +72,9 @@ const QUERY_SYSTEMCASES_INFO_BYID =`SELECT
 
 
 
-const QUERY_PRODUCT = `SELECT * FROM products`;
+const QUERY_PRODUCT = `SELECT * FROM products where is_activated = 1`;
 
-const QUERY_PARAMS = `SELECT * from  person_param where product_id=?`;
+const QUERY_PARAMS = `SELECT * from  person_param where product_id = ? and is_activated = 1 `;
 
 module.exports = { 
     QUERY_SOLVER_INFO ,

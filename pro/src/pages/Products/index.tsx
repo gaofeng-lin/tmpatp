@@ -125,6 +125,12 @@ const expandedRowRender = () => {
           sendEditParam(data);
           await waitTime(2000);
         },
+        onDelete: async (rowKey, row) => {
+          // console.log(rowKey, data, row);
+          console.log(rowKey, row);
+          // sendEditParam(data);
+          await waitTime(2000);
+        },
         // onChange: setEditableRowKeys,
       }}
     />

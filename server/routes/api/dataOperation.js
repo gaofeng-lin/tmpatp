@@ -4,7 +4,7 @@ const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYS
 const {test} = require('../../config/testdb');
 const {testQuery, testInsertProduct, 
     testInsertPersonParam, testGETMaxId, 
-    updateProducts} = require('../../config/testdb');
+    updateProductsParams} = require('../../config/testdb');
 
 
 //查询产品表
@@ -18,7 +18,13 @@ router.get('/testproduct', async ctx => {
 router.get('/testparam', async ctx => {
     
     const product_id = ctx.request.query.product_id;
-    const SQL = 'SELECT * from  person_param where product_id='+product_id;
+    // const SQL = 'SELECT * FROM  person_param where product_id = ? and is_activated = 1';
+    const SQL = 'SELECT * FROM  person_param where product_id = ' + product_id + ' and is_activated = 1';
+    // const SQL_PARAM = [];
+    // SQL_PARAM[0] = product_id;
+    // const data = await testQuery(SQL, SQL_PARAM);
+    console.log('product_id:')
+    console.log(product_id);
     const data = await testQuery(SQL);
     ctx.body = {data}
 
@@ -71,8 +77,8 @@ router.post('/sendeditproduct', async ctx => {
     updateParams[1] = resq.cfdversion;
     updateParams[2] = resq.product_info;
     updateParams[3] = resq.product_id;
-    const SQL_UPDATE_PRODUCTS = 'UPDATE products SET product_name = ?,cfdversion = ?,product_info = ? where product_id = ?';
-    updateProducts(SQL_UPDATE_PRODUCTS, updateParams);
+    const SQL_UPDATE_PRODUCTS = 'UPDATE products SET product_name = ?,cfdversion = ?,product_info = ?, where product_id = ?';
+    updateProductsParams(SQL_UPDATE_PRODUCTS, updateParams);
     const resp = 'success';
     ctx.body = resp
 })
@@ -87,7 +93,7 @@ router.post('/sendeditparam', async ctx => {
     updateParams[3] = resq.var_value;
     updateParams[4] = resq.id;
     const SQL_UPDATE_PARAMS = 'UPDATE person_param SET param_name = ?,var_type = ?,var_name = ?,var_value = ? where id = ?';
-    updateProducts(SQL_UPDATE_PARAMS, updateParams);
+    updateProductsParams(SQL_UPDATE_PARAMS, updateParams);
     
     const resp = 'success';
     ctx.body = resp

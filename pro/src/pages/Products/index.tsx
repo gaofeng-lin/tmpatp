@@ -20,6 +20,7 @@ export type TableListItem = {
   cfdversion: number;
   product_info: string;
   url: string;
+  id: string;
 };
 export default () => {
   
@@ -62,6 +63,7 @@ const columns: ProColumns<TableListItem>[] = [
       <a
         key="editable"
         onClick={() => {
+          // action?.startEditable?.(record.product_id);
           action?.startEditable?.(record.product_id);
         }}
       >
@@ -73,9 +75,9 @@ const columns: ProColumns<TableListItem>[] = [
     ],
   },
 ];
-
+const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
 const expandedRowRender = () => {
-  // const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+  // const [editableKeys, setExpandKeys] = useState<React.Key[]>([]);
   return (
     <ProTable
       params={{product_id: productId}}
@@ -84,21 +86,21 @@ const expandedRowRender = () => {
         { title: '变量类型', dataIndex: 'var_type', key: 'var_type' },
         { title: '变量名', dataIndex: 'var_name', key: 'var_name' },
         { title: '变量值', dataIndex: 'var_value', key: 'var_value' },
-        // {
-        //   title: '操作',
-        //   valueType: 'option',
-        //   width: 200,
-        //   render: (text, record, _, action) => [
-        //     <a
-        //       key="editable"
-        //       onClick={() => {
-        //         action?.startEditable?.(record.product_id);
-        //       }}
-        //     >
-        //       编辑
-        //     </a>,
-        //   ],
-        // },
+        {
+          title: '操作',
+          valueType: 'option',
+          width: 200,
+          render: (text, record, _, action) => [
+            <a
+              key="editable"
+              onClick={() => {
+                action?.startEditable?.(record.id);
+              }}
+            >
+              编辑
+            </a>,
+          ],
+        },
       ]}
       headerTitle={false}
       rowKey="id"
@@ -106,6 +108,7 @@ const expandedRowRender = () => {
       options={false}
       request={async (params) => {
         const msg = await getTestParam(params);
+        console.log(msg.data.results);
         return {
           data: msg.data.results,
           success: true,
@@ -115,12 +118,12 @@ const expandedRowRender = () => {
       pagination={false}
       editable={{
         type: 'multiple',
-        editableKeys,
+        // editableKeys,
         onSave: async (rowKey, data, row) => {
           console.log(rowKey, data, row);
           await waitTime(2000);
         },
-        onChange: setEditableRowKeys,
+        // onChange: setEditableRowKeys,
       }}
     />
   );
@@ -138,7 +141,8 @@ const waitTime = (time: number = 100) => {
   });
 };
 
-const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+
+// const [editableKeys, setEditableRowKeys] = useState([]);
   return (
     <PageContainer>
         <ProTable<TableListItem>
@@ -146,6 +150,7 @@ const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
       request={async () => {
 
         const msg = await getTestProduct();
+        console.log(msg.data.results);
         return{
           data:msg.data.results,
           success: true,
@@ -159,17 +164,11 @@ const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
       onExpand={onExpandFn}
       search={false}
       dateFormatter="string"
-      // headerTitle="产品管理"
-      // headerTitle = "'pages.productManager': '产品管理'"
       options={false}
-
       editable={{
         type: 'multiple',
         editableKeys,
         onSave: async (rowKey, data, row) => {
-          console.log("rowKey:",rowKey);
-          console.log("data:",data);
-          console.log("row:",row);
           console.log(rowKey, data, row);
           await waitTime(2000);
         },

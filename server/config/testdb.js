@@ -130,7 +130,7 @@ const updateProductsParams = (updateSql, updateSqlParams) => {
          console.log('[INSERT ERROR] - ',err.message);
          return;
         }        
-        console.log("更新成功")
+        console.log("成功")
       
         });
     

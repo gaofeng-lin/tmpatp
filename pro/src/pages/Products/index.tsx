@@ -6,7 +6,7 @@ import { request, FormattedMessage } from 'umi';
 import {getTestParam, getTestProduct} from  '@/services/api/api';
 import React, {useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import {sendEditProduct, sendEditParam} from  '@/services/api/api';
+import {sendEditProduct, sendEditParam, deleteProductParam} from  '@/services/api/api';
 import MF from './modal';
 
 export type Status = {
@@ -120,14 +120,15 @@ const expandedRowRender = () => {
         type: 'multiple',
         // editableKeys,
         onSave: async (rowKey, data, row) => {
-          // console.log(rowKey, data, row);
-          console.log(data);
           sendEditParam(data);
           await waitTime(2000);
         },
         onDelete: async (rowKey, row) => {
           // console.log(rowKey, data, row);
-          console.log(rowKey, row);
+          let deleteObj = {};
+          deleteObj['id'] = rowKey;
+          deleteObj['idType'] = 'id';
+          deleteProductParam(deleteObj);
           // sendEditParam(data);
           await waitTime(2000);
         },
@@ -178,6 +179,12 @@ const waitTime = (time: number = 100) => {
         onSave: async (rowKey, data, row) => {
           sendEditProduct(data);
           await waitTime(2000);
+        },
+        onDelete: async (rowKey) => {
+          let deleteObj = {};
+          deleteObj['id'] = rowKey;
+          deleteObj['idType'] = 'product_id';
+          deleteProductParam(deleteObj);
         },
         onChange: setEditableRowKeys,
       }}

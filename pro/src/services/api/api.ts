@@ -145,3 +145,12 @@ export async function sendEditParam(params = {}) {
     data: {...params},
   })
 }
+
+export async function deleteProductParam(params = {}) {
+  console.log({...params})
+  return request('/api/deleteproductparam', {
+    method: 'post',
+    data: {...params},
+  })
+}
+

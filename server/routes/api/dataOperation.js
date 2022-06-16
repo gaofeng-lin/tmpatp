@@ -99,7 +99,36 @@ router.post('/sendeditparam', async ctx => {
     ctx.body = resp
 })
 
+// 删除产品或参数
+router.post('/deleteproductparam', async ctx => {
+    const resq = ctx.request.body;
+    const flag = resq.idType;
+    const updateParams = [];
+    if(flag == 'id') {
+        updateParams[0] = resq.id;
+        const SQL_DELETE = 'UPDATE person_param SET is_activated = 0 where id = ?'
+        updateProductsParams(SQL_DELETE,updateParams);
+    } else {
+        console.log('我是product_id');
+        updateParams[0] = resq.id;
+        const SQL_DELETE = 'UPDATE products SET is_activated = 0 where product_id = ?'
+        updateProductsParams(SQL_DELETE,updateParams);
+    }
 
+    // const updateParams = [];
+    // const strTableName = resq.tableName;
+    // const strIdName = resq.idName;
+    // console.log(strTableName);
+    // updateParams[0] = strTableName.substring(0,strTableName.length);
+    // updateParams[1] = strIdName.substring(0, strTableName.length);
+    // updateParams[2] = resq.id;
+    // console.log(updateParams);
+    // const SQL_DELETE = 'UPDATE ? SET is_activated = 0 where ? = ?'
+    // updateProductsParams(SQL_DELETE,updateParams);
+
+    const resp = 'success';
+    ctx.body = resp
+})
 
 //查询
 // 测试时可简单创建 string: name, number: id, 自增主键id

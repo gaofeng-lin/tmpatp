@@ -127,4 +127,27 @@ connection.end();
 }
 
 
-module.exports = { testQuery, testInsertProduct, testInsertPersonParam,testGETMaxId };
+const updateProducts = (updateSql, updateSqlParams) => {
+    var mysql      = require('mysql');
+    var connection = mysql.createConnection({
+      host     : 'localhost',
+      user     : 'root',
+      password : 'root',
+      database : 'phenglei'
+    });
+    connection.connect();
+    connection.query(updateSql,updateSqlParams,function (err, result) {
+        if(err){
+         console.log('[INSERT ERROR] - ',err.message);
+         return;
+        }        
+        console.log("更新成功")
+      
+        });
+    
+ 
+connection.end();
+}
+
+module.exports = { testQuery, testInsertProduct, testInsertPersonParam,
+    testGETMaxId, updateProducts };

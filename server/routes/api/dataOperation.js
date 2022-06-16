@@ -2,7 +2,9 @@ const router = require('koa-router')()
 const { query } = require('../../config/pool');
 const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYSTEMCASES_INFO,QUERY_PARAMS,QUERY_PRODUCT } = require('../../config/sql');
 const {test} = require('../../config/testdb');
-const {testQuery, testInsertProduct, testInsertPersonParam, testGETMaxId} = require('../../config/testdb');
+const {testQuery, testInsertProduct, 
+    testInsertPersonParam, testGETMaxId, 
+    updateProducts} = require('../../config/testdb');
 
 
 //查询产品表
@@ -60,6 +62,24 @@ router.post('/testproductinfo', async ctx => {
     ctx.body = resp
 })
 
+// 更新产品信息
+router.post('/sendeditproduct', async ctx => {
+    const resq = ctx.request.body;
+
+    const updateParams = [];
+    updateParams[0] =resq.product_name;
+    updateParams[1] = resq.cfdversion;
+    updateParams[2] = resq.product_info;
+    updateParams[3] = resq.product_id;
+    const SQL_UPDATE_PRODUCTS = 'UPDATE products SET product_name = ?,cfdversion = ?,product_info = ? where product_id = ?';
+    updateProducts(SQL_UPDATE_PRODUCTS, updateParams);
+
+    // 更新函数
+    
+    console.log(updateParams);
+    const resp = 'success';
+    ctx.body = resp
+})
 
 //查询
 // 测试时可简单创建 string: name, number: id, 自增主键id

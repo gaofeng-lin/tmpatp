@@ -6,6 +6,7 @@ import { request, FormattedMessage } from 'umi';
 import {getTestParam, getTestProduct} from  '@/services/api/api';
 import React, {useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
+import {sendEditProduct} from  '@/services/api/api';
 import MF from './modal';
 
 export type Status = {
@@ -108,7 +109,6 @@ const expandedRowRender = () => {
       options={false}
       request={async (params) => {
         const msg = await getTestParam(params);
-        console.log(msg.data.results);
         return {
           data: msg.data.results,
           success: true,
@@ -120,7 +120,7 @@ const expandedRowRender = () => {
         type: 'multiple',
         // editableKeys,
         onSave: async (rowKey, data, row) => {
-          console.log(rowKey, data, row);
+          // console.log(rowKey, data, row);
           await waitTime(2000);
         },
         // onChange: setEditableRowKeys,
@@ -142,7 +142,7 @@ const waitTime = (time: number = 100) => {
 };
 
 
-// const [editableKeys, setEditableRowKeys] = useState([]);
+
   return (
     <PageContainer>
         <ProTable<TableListItem>
@@ -150,7 +150,6 @@ const waitTime = (time: number = 100) => {
       request={async () => {
 
         const msg = await getTestProduct();
-        console.log(msg.data.results);
         return{
           data:msg.data.results,
           success: true,
@@ -169,7 +168,9 @@ const waitTime = (time: number = 100) => {
         type: 'multiple',
         editableKeys,
         onSave: async (rowKey, data, row) => {
-          console.log(rowKey, data, row);
+          console.log("data:");
+          console.log(data);
+          sendEditProduct(data);
           await waitTime(2000);
         },
         onChange: setEditableRowKeys,

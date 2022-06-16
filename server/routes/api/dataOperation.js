@@ -34,16 +34,16 @@ router.get('/testparam', async ctx => {
 router.get('/getsolvernum', async ctx => {
     const SQL_SOLVER_NUM = 'SELECT idsolver_info FROM solver_info LIMIT 10';
     const data = await getSolverNum(SQL_SOLVER_NUM);
-    console.log(data.results);
     let res = [];
     let res_list = {};
     for (let i = 0; i < data.results.length; i++) {
         res_list['value'] = data.results[i]['idsolver_info'];
         res_list['label'] = data.results[i]['idsolver_info'];
         res.push(res_list);
-        res_list1 = {}
+
+
+        res_list = {}
     }
-    console.log(res);
     ctx.body = res;
 })
 

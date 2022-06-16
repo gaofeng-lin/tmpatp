@@ -77,54 +77,18 @@ const waitTime = (time: number = 100) => {
 
 
 const MF = () => {
+
+    const [Options, setOptions] = useState([])
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     defaultData.map((item) => item.id),);
 
-    // const solver_list = () => {
-    //   let res = [];
-    //   let res_list = {};
-    //   res_list['value'] = 5720;
-    //   res_list['label'] = 5720;
-    //   res[0] = res_list;
-    //   res_list = {};
-    //   res_list['value'] = 9198;
-    //   res_list['label'] = 9198;
-    //   res[1] = res_list;
-    //   return res;
-      
-    // }
-
-    // const fin = solver_list()
 
     const tmpRes = async () => {
-      const msg = await getSolverNum();
-      return msg;
+      const opts = await getSolverNum();
+      console.log(opts);
+      
+      setOptions(opts);
     }
-
-
-
-    console.log(tmpRes);
-
-    let res1: any = [];
-    let res_list1 = {};
-    tmpRes().then((data: any) => {
-      console.log(data);
-      res1 = data.splice();
-
-      // for (let i = 0; i < data.length; i++) {
-      //     console.log(data[i]['idsolver_info']);
-      //     res_list1['value'] = data[i]['idsolver_info'];
-      //     res_list1['label'] = data[i]['idsolver_info'];
-      //     res1.push(res_list1);
-      //     res_list1 = {}
-      // }
-      // // res_list1['value'] = data.idsolver_info;
-      // // res_list1['label'] = data.idsolver_info;
-      // // // res1.push(res_list1);
-      // // console.log(res_list1)
-      // // res_list1 = {};
-    })
-    // console.log(res1);
 
       let res = [];
       let res_list = {};
@@ -143,7 +107,7 @@ const MF = () => {
     }>
       title="添加产品"
       trigger={
-        <Button type="primary">
+        <Button type="primary" onClick={tmpRes}>
           <PlusOutlined />
           添加产品
         </Button>
@@ -165,25 +129,7 @@ const MF = () => {
       </ProForm.Group>
       <ProFormSelect width="sm" 
       name="cfdversion" 
-      // options={[
-      //   {
-      //     value:9198,
-      //     label: 9198,
-      //   },
-      //   {
-      //     value:5720,
-      //     label:5720,
-      //   }
-      // ]}
-      options = {
-         res as string[]
-        // fin as string[]
-        //  () : string[]=> {
-        //   const msg =  getSolverNum();
-        //   return msg;
-        // }
-        // res2.then() as string[]
-      }
+      options = {Options}
       label="解算器版本" />
       <ProForm.Item
         label="参数添加"

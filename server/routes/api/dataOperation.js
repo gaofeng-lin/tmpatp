@@ -4,7 +4,7 @@ const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYS
 const {test} = require('../../config/testdb');
 const {testQuery, testInsertProduct, 
     testInsertPersonParam, testGETMaxId, 
-    updateProductsParams} = require('../../config/testdb');
+    updateProductsParams, getSolverNum} = require('../../config/testdb');
 
 
 //查询产品表
@@ -29,6 +29,23 @@ router.get('/testparam', async ctx => {
     ctx.body = {data}
 
 });
+
+// 查询解算器编号
+router.get('/getsolvernum', async ctx => {
+    const SQL_SOLVER_NUM = 'SELECT idsolver_info FROM solver_info LIMIT 10';
+    const data = await getSolverNum(SQL_SOLVER_NUM);
+    console.log(data.results);
+    let res = [];
+    let res_list = {};
+    for (let i = 0; i < data.results.length; i++) {
+        res_list['value'] = data.results[i]['idsolver_info'];
+        res_list['label'] = data.results[i]['idsolver_info'];
+        res.push(res_list);
+        res_list1 = {}
+    }
+    console.log(res);
+    ctx.body = res;
+})
 
 // 产品信息写入参数表和产品表
 router.post('/testproductinfo', async ctx => {
@@ -115,20 +132,11 @@ router.post('/deleteproductparam', async ctx => {
         updateProductsParams(SQL_DELETE,updateParams);
     }
 
-    // const updateParams = [];
-    // const strTableName = resq.tableName;
-    // const strIdName = resq.idName;
-    // console.log(strTableName);
-    // updateParams[0] = strTableName.substring(0,strTableName.length);
-    // updateParams[1] = strIdName.substring(0, strTableName.length);
-    // updateParams[2] = resq.id;
-    // console.log(updateParams);
-    // const SQL_DELETE = 'UPDATE ? SET is_activated = 0 where ? = ?'
-    // updateProductsParams(SQL_DELETE,updateParams);
-
     const resp = 'success';
     ctx.body = resp
 })
+
+
 
 //查询
 // 测试时可简单创建 string: name, number: id, 自增主键id

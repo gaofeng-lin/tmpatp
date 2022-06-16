@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
   database : 'phenglei'
 });
  
-connection.connect();
+// connection.connect();
  
 
 
@@ -138,5 +138,31 @@ const updateProductsParams = (updateSql, updateSqlParams) => {
 connection.end();
 }
 
+const getSolverNum = (sql, values) => {
+    return new Promise((resolve, reject) => {
+        var mysql      = require('mysql');
+        var connection = mysql.createConnection({
+          host     : 'localhost',
+          user     : 'root',
+          password : 'root',
+          database : 'case_test'
+        });
+ 
+        connection.connect();
+        connection.query(sql, values, (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                connection.end()
+                resolve({
+                    status: 200,
+                    results
+                });
+            }
+    });
+    })
+};
+
+
 module.exports = { testQuery, testInsertProduct, testInsertPersonParam,
-    testGETMaxId, updateProductsParams };
+    testGETMaxId, updateProductsParams, getSolverNum};

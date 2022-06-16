@@ -154,3 +154,10 @@ export async function deleteProductParam(params = {}) {
   })
 }
 
+export async function getSolverNum(params = {}) {
+  return request('/api/getsolvernum', {
+    method: 'get',
+    params,
+  })
+}
+

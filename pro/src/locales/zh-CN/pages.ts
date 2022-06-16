@@ -38,8 +38,8 @@ export default {
   'pages.jobManager.actions': '操作',
 
   'pages.productManager': '产品管理',
-  'pages.productManager.id': '产品号',
+  'pages.productManager.id': '产品编号',
   'pages.productManager.name': '产品名称',
-  'pages.productManager.brief': '产品简介',
-  'pages.productManager.solver_version': '版本号',
+  'pages.productManager.brief': '产品说明',
+  'pages.productManager.solver_version': '解算器版本号',
 };

@@ -2,9 +2,10 @@ import { DownOutlined, EllipsisOutlined, QuestionCircleOutlined } from '@ant-des
 import { dateArrayFormatter, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Tag, Tooltip } from 'antd';
-import { request } from 'umi';
+import { request, FormattedMessage } from 'umi';
 import {getTestParam, getTestProduct} from  '@/services/api/api';
 import React, {useState } from 'react';
+import { PageContainer } from '@ant-design/pro-layout';
 import MF from './modal';
 
 export type Status = {
@@ -27,20 +28,20 @@ const [productId, setProductId] = useState(1);
   
 const columns: ProColumns<TableListItem>[] = [
   {
-    title: '产品编号',
+    title: <FormattedMessage id="pages.productManager.id"  />,
     width: 120,
     dataIndex: 'product_id',
     readonly: true,
     // render: (_) => <a>{_}</a>,
   },
   {
-    title: '产品名称',
+    title: <FormattedMessage id="pages.productManager.name"  />,
     width: 120,
     dataIndex: 'product_name',
     // render: (_, record) => <a>{_}</a>,
   },
   {
-    title: '解算器版本号',
+    title: <FormattedMessage id="pages.productManager.solver_version"  />,
     width: 120,
     dataIndex: 'cfdversion',
     align: 'left',
@@ -48,7 +49,7 @@ const columns: ProColumns<TableListItem>[] = [
   },
 
   {
-    title: '产品说明',
+    title: <FormattedMessage id="pages.productManager.brief"  />,
     width: 120,
     dataIndex: 'product_info',
     // render: (_, record) => <a>{_}</a>,
@@ -139,7 +140,7 @@ const waitTime = (time: number = 100) => {
 
 const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   return (
-    <>
+    <PageContainer>
         <ProTable<TableListItem>
       columns={columns}
       request={async () => {
@@ -158,7 +159,8 @@ const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
       onExpand={onExpandFn}
       search={false}
       dateFormatter="string"
-      headerTitle="产品管理"
+      // headerTitle="产品管理"
+      // headerTitle = "'pages.productManager': '产品管理'"
       options={false}
 
       editable={{
@@ -186,7 +188,7 @@ const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
       // ]}
     />
         <div><MF></MF></div>
-    </>
+    </PageContainer>
 
 
       

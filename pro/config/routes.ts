@@ -34,7 +34,7 @@
   },
   {
     name: 'productManager',
-    // icon: 'icon-icon-jobs',
+    icon: 'icon-icon-jobs',
     path: '/products',
     component: './Products',
   },

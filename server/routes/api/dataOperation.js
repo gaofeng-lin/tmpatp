@@ -40,8 +40,6 @@ router.get('/getsolvernum', async ctx => {
         res_list['value'] = data.results[i]['idsolver_info'];
         res_list['label'] = data.results[i]['idsolver_info'];
         res.push(res_list);
-
-
         res_list = {}
     }
     ctx.body = res;

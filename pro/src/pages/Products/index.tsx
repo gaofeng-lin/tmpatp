@@ -70,7 +70,7 @@ const columns: ProColumns<TableListItem>[] = [
       >
         编辑
       </a>,
-    <a href={'http://116.63.141.248/#/project'} target="_blank" rel="noopener noreferrer" key="view">
+    <a href={'http://localhost:8080/#/login/' + record.product_id} target="_blank" rel="noopener noreferrer" key="view">
       使用产品
     </a>,
     ],

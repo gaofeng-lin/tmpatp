@@ -78,15 +78,14 @@ const waitTime = (time: number = 100) => {
 
 const MF = () => {
 
-    const [Options, setOptions] = useState([])
+    
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     defaultData.map((item) => item.id),);
 
 
+    const [Options, setOptions] = useState([])
     const tmpRes = async () => {
       const opts = await getSolverNum();
-      console.log(opts);
-      
       setOptions(opts);
     }
 
@@ -134,7 +133,6 @@ const MF = () => {
       <ProForm.Item
         label="参数添加"
         name="dataSource"
-        // initialValue={defaultData}
         trigger="onValuesChange"
       >
         <EditableProTable<DataSourceType>

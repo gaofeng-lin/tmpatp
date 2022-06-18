@@ -15,10 +15,10 @@ const testQuery = (sql, values) => {
     return new Promise((resolve, reject) => {
         var mysql      = require('mysql');
         var connection = mysql.createConnection({
-          host     : 'localhost',
-          user     : 'root',
-          password : 'root',
-          database : 'phenglei'
+            host: '121.37.93.92',
+            user: 'root',
+            password: 'SBcaiyong@PASSword123',
+            database : 'phenglei'
         });
  
         connection.connect();
@@ -47,10 +47,10 @@ async function sleep() {
 const testInsertProduct = (addSql, addSqlParams) => {
         var mysql      = require('mysql');
         var connection = mysql.createConnection({
-          host     : 'localhost',
-          user     : 'root',
-          password : 'root',
-          database : 'phenglei'
+            host: '121.37.93.92',
+            user: 'root',
+            password: 'SBcaiyong@PASSword123',
+            database : 'phenglei'
         });
         connection.connect();
         connection.query(addSql,addSqlParams,function (err, result) {
@@ -70,10 +70,10 @@ const testGETMaxId = (sql, values) => {
     return new Promise((resolve, reject) => {
         var mysql      = require('mysql');
         var connection = mysql.createConnection({
-          host     : 'localhost',
-          user     : 'root',
-          password : 'root',
-          database : 'phenglei'
+            host: '121.37.93.92',
+            user: 'root',
+            password: 'SBcaiyong@PASSword123',
+            database : 'phenglei'
         });
  
         connection.connect();
@@ -95,10 +95,10 @@ const testGETMaxId = (sql, values) => {
 const testInsertPersonParam = (addSql, addSqlParams) => {
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'root',
-      database : 'phenglei'
+        host: '121.37.93.92',
+        user: 'root',
+        password: 'SBcaiyong@PASSword123',
+        database : 'phenglei'
     });
     connection.connect();
     for (let i = 0; i < addSqlParams.length; i++) {
@@ -119,10 +119,10 @@ connection.end();
 const updateProductsParams = (updateSql, updateSqlParams) => {
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'root',
-      password : 'root',
-      database : 'phenglei'
+        host: '121.37.93.92',
+        user: 'root',
+        password: 'SBcaiyong@PASSword123',
+        database : 'phenglei'
     });
     connection.connect();
     connection.query(updateSql,updateSqlParams,function (err, result) {
@@ -142,10 +142,10 @@ const getSolverNum = (sql, values) => {
     return new Promise((resolve, reject) => {
         var mysql      = require('mysql');
         var connection = mysql.createConnection({
-          host     : 'localhost',
-          user     : 'root',
-          password : 'root',
-          database : 'case_test'
+            host: '121.37.93.92',
+            user: 'root',
+            password: 'SBcaiyong@PASSword123',
+            database : 'case_test'
         });
  
         connection.connect();

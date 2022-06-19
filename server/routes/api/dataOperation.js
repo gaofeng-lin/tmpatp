@@ -55,7 +55,7 @@ router.post('/testproductinfo', async ctx => {
     const product_id = resId.results[0].product_id + 1
 
     // 插入产品表的信息
-    const SQL_PRODUCT = 'INSERT INTO products (product_id,product_name,cfdversion,product_info) VALUES ('+product_id+',?,?,?)';
+    const SQL_PRODUCT = 'INSERT INTO products (product_id,product_name,cfdversion,product_info,is_activated) VALUES ('+product_id+',?,?,?,1)';
     let productParams = [];
     productParams[0] = resq.values.product_name;
     productParams[1] = resq.values.cfdversion;

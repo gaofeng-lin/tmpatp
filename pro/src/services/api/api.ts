@@ -107,16 +107,16 @@ export async function getResults(filename = '') {
 }
 
 
-export async function getTestParam(params = {}) {
-  return request('/api/testparam', {
+export async function getPersonParam(params = {}) {
+  return request('/api/queryparam', {
     method: 'GET',
     params,
   });
 }
 
 
-export async function getTestProduct(params = {}) {
-  return request('/api/testproduct', {
+export async function getProductInfo(params = {}) {
+  return request('/api/queryproduct', {
     method: 'GET',
     params,
   });
@@ -124,7 +124,7 @@ export async function getTestProduct(params = {}) {
 
 export async function sendProductInfo(params = {}) {
   console.log({...params})
-  return request('/api/testproductinfo', {
+  return request('/api/insertproductinfo', {
     method: 'post',
     data: {...params},
   })

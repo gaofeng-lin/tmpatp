@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 
 
 
-const testQuery = (sql, values) => {
+const QueryProduct = (sql, values) => {
     return new Promise((resolve, reject) => {
         var mysql      = require('mysql');
         var connection = mysql.createConnection({
@@ -44,7 +44,7 @@ async function sleep() {
     await funcwait(3000);
 }
 
-const testInsertProduct = (addSql, addSqlParams) => {
+const InsertProduct = (addSql, addSqlParams) => {
         var mysql      = require('mysql');
         var connection = mysql.createConnection({
             host: '121.37.93.92',
@@ -66,7 +66,7 @@ const testInsertProduct = (addSql, addSqlParams) => {
 }
 
 
-const testGETMaxId = (sql, values) => {
+const GETProductMaxId = (sql, values) => {
     return new Promise((resolve, reject) => {
         var mysql      = require('mysql');
         var connection = mysql.createConnection({
@@ -92,7 +92,7 @@ const testGETMaxId = (sql, values) => {
 
 
 
-const testInsertPersonParam = (addSql, addSqlParams) => {
+const InsertPersonParam = (addSql, addSqlParams) => {
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
         host: '121.37.93.92',
@@ -164,5 +164,5 @@ const getSolverNum = (sql, values) => {
 };
 
 
-module.exports = { testQuery, testInsertProduct, testInsertPersonParam,
-    testGETMaxId, updateProductsParams, getSolverNum};
+module.exports = { QueryProduct, InsertProduct, InsertPersonParam,
+    GETProductMaxId, updateProductsParams, getSolverNum};

@@ -1,31 +1,30 @@
 const router = require('koa-router')()
 const { query } = require('../../config/pool');
 const { QUERY_SOLVER_INFO, QUERY_CASE_LIST,QUERY_INTEGRATIONCASES_INFO,QUERY_SYSTEMCASES_INFO,QUERY_PARAMS,QUERY_PRODUCT } = require('../../config/sql');
-const {test} = require('../../config/testdb');
-const {testQuery, testInsertProduct, 
-    testInsertPersonParam, testGETMaxId, 
-    updateProductsParams, getSolverNum} = require('../../config/testdb');
+const {QueryProduct, InsertProduct, 
+    InsertPersonParam, GETProductMaxId, 
+    updateProductsParams, getSolverNum} = require('../../config/productdb');
 
 
 //查询产品表
-router.get('/testproduct', async ctx => {
-    const data = await testQuery(QUERY_PRODUCT);
+router.get('/queryproduct', async ctx => {
+    const data = await QueryProduct(QUERY_PRODUCT);
     ctx.body = {data}
 
 });
 
 //查询参数表表
-router.get('/testparam', async ctx => {
+router.get('/queryparam', async ctx => {
     
     const product_id = ctx.request.query.product_id;
     // const SQL = 'SELECT * FROM  person_param where product_id = ? and is_activated = 1';
     const SQL = 'SELECT * FROM  person_param where product_id = ' + product_id + ' and is_activated = 1';
     // const SQL_PARAM = [];
     // SQL_PARAM[0] = product_id;
-    // const data = await testQuery(SQL, SQL_PARAM);
+    // const data = await QueryProduct(SQL, SQL_PARAM);
     console.log('product_id:')
     console.log(product_id);
-    const data = await testQuery(SQL);
+    const data = await QueryProduct(SQL);
     ctx.body = {data}
 
 });
@@ -46,12 +45,12 @@ router.get('/getsolvernum', async ctx => {
 })
 
 // 产品信息写入参数表和产品表
-router.post('/testproductinfo', async ctx => {
+router.post('/insertproductinfo', async ctx => {
     const resq = ctx.request.body;
 
     // 获取产品id
     const SQL_MAX_ID = 'SELECT product_id FROM products ORDER BY product_id desc limit 1';
-    const resId = await testGETMaxId(SQL_MAX_ID);
+    const resId = await GETProductMaxId(SQL_MAX_ID);
     const product_id = resId.results[0].product_id + 1
 
     // 插入产品表的信息
@@ -60,7 +59,7 @@ router.post('/testproductinfo', async ctx => {
     productParams[0] = resq.values.product_name;
     productParams[1] = resq.values.cfdversion;
     productParams[2] = resq.values.product_info;
-    testInsertProduct(SQL_PRODUCT, productParams);
+    InsertProduct(SQL_PRODUCT, productParams);
     
 
     // 插入参数表信息
@@ -78,7 +77,7 @@ router.post('/testproductinfo', async ctx => {
     }
     console.log('参数数组是：')
     console.log(paramArray);
-    testInsertPersonParam(SQL_PERSON_PARAM, paramArray);
+    InsertPersonParam(SQL_PERSON_PARAM, paramArray);
     const resp = 'success';
     ctx.body = resp
 })

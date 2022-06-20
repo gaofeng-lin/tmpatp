@@ -3,7 +3,7 @@ import { dateArrayFormatter, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Tag, Tooltip } from 'antd';
 import { request, FormattedMessage } from 'umi';
-import {getTestParam, getTestProduct} from  '@/services/api/api';
+import {getPersonParam, getProductInfo} from  '@/services/api/api';
 import React, {useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import {sendEditProduct, sendEditParam, deleteProductParam} from  '@/services/api/api';
@@ -70,7 +70,7 @@ const columns: ProColumns<TableListItem>[] = [
       >
         编辑
       </a>,
-    <a href={'http://localhost:8080/#/login/' + record.product_id} target="_blank" rel="noopener noreferrer" key="view">
+    <a href={'http://localhost:8080/#/login/' + record.product_id + '/' + record.cfdversion} target="_blank" rel="noopener noreferrer" key="view">
       使用产品
     </a>,
     ],
@@ -108,7 +108,7 @@ const expandedRowRender = () => {
       search={false}
       options={false}
       request={async (params) => {
-        const msg = await getTestParam(params);
+        const msg = await getPersonParam(params);
         return {
           data: msg.data.results,
           success: true,
@@ -158,7 +158,7 @@ const waitTime = (time: number = 100) => {
       columns={columns}
       request={async () => {
 
-        const msg = await getTestProduct();
+        const msg = await getProductInfo();
         return{
           data:msg.data.results,
           success: true,

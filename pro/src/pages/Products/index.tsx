@@ -8,6 +8,7 @@ import React, {useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import {sendEditProduct, sendEditParam, deleteProductParam} from  '@/services/api/api';
 import MF from './modal';
+import EditProduct from './Edit';
 
 export type Status = {
   color: string;
@@ -27,7 +28,10 @@ export default () => {
   
 const [productId, setProductId] = useState(1);
 
-  
+const test = () => {
+  <EditProduct></EditProduct>
+}
+ 
 const columns: ProColumns<TableListItem>[] = [
   {
     title: <FormattedMessage id="pages.productManager.id"  />,
@@ -65,10 +69,15 @@ const columns: ProColumns<TableListItem>[] = [
         key="editable"
         onClick={() => {
           // action?.startEditable?.(record.product_id);
-          action?.startEditable?.(record.product_id);
+          // return(
+          //    <MF></MF>
+          // )
+          // {test}
+         
         }}
       >
-        编辑
+        {/* 编辑 */}
+        <EditProduct product_id = {record.product_id}></EditProduct>
       </a>,
     <a href={'http://localhost:8080/#/login/' + record.product_id + '/' + record.cfdversion} target="_blank" rel="noopener noreferrer" key="view">
       使用产品

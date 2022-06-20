@@ -74,11 +74,14 @@ const waitTime = (time: number = 100) => {
   ];
 
   
+// type defaultValue as any
+interface Test { 
+    defaultValue?: string
+}
 
+const EditProduct = (props: any) => {
 
-const MF = () => {
-
-    
+    const product_id = props.product_id
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     defaultData.map((item) => item.id),);
 
@@ -93,11 +96,11 @@ const MF = () => {
       name: string;
       product_name: string;
     }>
-      title="添加产品"
+      title="编辑"
       trigger={
         <Button type="primary" onClick={tmpRes}>
           <PlusOutlined />
-          添加产品
+          编辑
         </Button>
       }
       onFinish={async (values) => {
@@ -115,10 +118,12 @@ const MF = () => {
         <ProFormText width="md" name="product_name" label="产品名称" placeholder="请输入名称" />
         <ProFormText width="md" name="product_info" label="产品说明" placeholder="请产品说明" />
       </ProForm.Group>
-      <ProFormSelect width="sm" 
-      name="cfdversion" 
-      options = {Options}
-      label="解算器版本" />
+      <ProFormText  width="sm" 
+      name="cfdversion"
+      defaultValue = "0571" 
+    //   options = {Options}
+      label="解算器版本" >
+      </ProFormText>
       <ProForm.Item
         label="参数添加"
         name="dataSource"
@@ -151,4 +156,4 @@ const MF = () => {
   );
 };
 
-export default MF;
+export default EditProduct;

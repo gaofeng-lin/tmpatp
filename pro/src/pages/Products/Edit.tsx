@@ -76,10 +76,10 @@ const waitTime = (time: number = 100) => {
   
 // type defaultValue as any
 interface Test { 
-    defaultValue?: string
+    Value: string[]
 }
 
-const EditProduct = (props: any) => {
+const EditProduct:React.FC<Test> = (props: any) => {
 
     const product_id = props.product_id
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
@@ -120,7 +120,7 @@ const EditProduct = (props: any) => {
       </ProForm.Group>
       <ProFormText  width="sm" 
       name="cfdversion"
-      defaultValue = "0571" 
+      Value = "0571" 
     //   options = {Options}
       label="解算器版本" >
       </ProFormText>

@@ -11,6 +11,8 @@ import {
 import { Button, message, Input } from 'antd';
 import React, {useState} from 'react';
 import {sendProductInfo,getSolverNum} from  '@/services/api/api';
+import Demo from './NestedForm'
+
 
 const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -115,21 +117,27 @@ const EditProduct:React.FC<Test> = (props: any) => {
       }}
     >
       <ProForm.Group>
-        <ProFormText width="md" name="product_name" label="产品名称" placeholder="请输入名称" />
-        <ProFormText width="md" name="product_info" label="产品说明" placeholder="请产品说明" />
+        <ProFormText 
+        width="md" name="product_name" label="产品名称" 
+        initialValue={"产品1号"}
+        />
+        <ProFormText 
+        width="md" name="product_info" label="产品说明" 
+        placeholder="请产品说明" 
+        initialValue={"使用了算法1"}
+        />
       </ProForm.Group>
       <ProFormText  width="sm" 
       name="cfdversion"
-      Value = "0571" 
+      initialValue={22.2}
     //   options = {Options}
-      label="解算器版本" >
-      </ProFormText>
+      label="解算器版本" />
       <ProForm.Item
         label="参数添加"
         name="dataSource"
         trigger="onValuesChange"
       >
-        <EditableProTable<DataSourceType>
+        {/* <EditableProTable<DataSourceType>
           rowKey="id"
           toolBarRender={false}
           columns={columns}
@@ -150,7 +158,8 @@ const EditProduct:React.FC<Test> = (props: any) => {
               return [dom.delete];
             },
           }}
-        />
+        /> */}
+        <Demo></Demo>
       </ProForm.Item>
     </ModalForm>
   );

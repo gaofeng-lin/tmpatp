@@ -12,17 +12,30 @@ import {
   
 
   const Demo = () => {
-
-    const [renderFlag, setFlag] = useState(false)
-    // const selectMap = {
-    //   inputform: '输入框',
-    //   selectform: '下拉框',
-    // }
-
+    const [renderFlag, setFlag] = useState(true)
     return (
       <ProForm 
       onFinish={async (e) => console.log(e)}
-      onValuesChange={(value) => console.log('value is :' + value)}
+      onValuesChange={(changeValues) => {
+        console.log(changeValues)
+        // if (changeValues.users[0].labels[0].type == 'selectform') {
+        //   setFlag(false);
+        // }
+        // if (changeValues.users[0].labels[0].type == 'inputform') {
+        //   setFlag(true);
+        // }
+        // const tmpArray = changeValues.users[0].labels
+        // for (let i = 0; i < tmpArray.length; i++) {
+        //   if (tmpArray[i].type == 'selectform') {
+        //     setFlag(false)
+        //   } else {
+        //     setFlag(true)
+        //   }
+        // }
+        changeValues.users[0].labels[0].type  == 'selectform'  ? setFlag(false) : setFlag(true)
+      }
+      }
+        
       >
         {/* <ProFormText name="name" label="姓名" /> */}
         <ProFormList
@@ -84,16 +97,16 @@ import {
               label="输入类型" 
               options={[
                 {
-                  value: 'chapter',
-                  label: '盖章后生效',
+                  value: 'inputform',
+                  label: '文本框参数',
                 },
                 {
-                  value: 'none',
-                  label: '不生效',
+                  value: 'selectform',
+                  label: '下拉框参数',
                 },
               ]}
           
-              // initialValue="输入框"
+              initialValue="文本框参数"
               />
       
               {
@@ -106,7 +119,7 @@ import {
                   </div>
                 ): (
                   <div>
-                    hello
+                    select,下拉框
                   </div>
                 )
               }

@@ -4,11 +4,26 @@ import {
     ProFormGroup,
     ProFormList,
     ProFormText,
+    ProFormSelect
   } from '@ant-design/pro-components';
+  import React, {useState } from 'react';
   
+
+  
+
   const Demo = () => {
+
+    const [renderFlag, setFlag] = useState(false)
+    // const selectMap = {
+    //   inputform: '输入框',
+    //   selectform: '下拉框',
+    // }
+
     return (
-      <ProForm onFinish={async (e) => console.log(e)}>
+      <ProForm 
+      onFinish={async (e) => console.log(e)}
+      onValuesChange={(value) => console.log('value is :' + value)}
+      >
         {/* <ProFormText name="name" label="姓名" /> */}
         <ProFormList
           name="users"
@@ -21,6 +36,7 @@ import {
               name: '模块1',
             },
           ]}
+ 
           itemRender={({ listDom, action }, { record }) => {
             return (
               <ProCard
@@ -36,13 +52,14 @@ import {
             );
           }}
         >
-          <ProFormGroup>
+          {/* <ProFormGroup>
             <ProFormText name="name" label="姓名" />
             <ProFormText name="nickName" label="昵称" />
-          </ProFormGroup>
+          </ProFormGroup> */}
           <ProFormList
             name="labels"
             label="用户信息"
+
             creatorButtonProps={{
                 creatorButtonText: '添加参数',
               }}
@@ -59,9 +76,45 @@ import {
               tooltipText: '不需要这行了',
             }}
           >
-            <ProFormGroup key="group">
-              <ProFormText name="value" label="值" />
-              <ProFormText name="label" label="显示名称" />
+            <ProFormGroup key="group"
+            
+            >
+              <ProFormSelect 
+              name="type" 
+              label="输入类型" 
+              options={[
+                {
+                  value: 'chapter',
+                  label: '盖章后生效',
+                },
+                {
+                  value: 'none',
+                  label: '不生效',
+                },
+              ]}
+          
+              // initialValue="输入框"
+              />
+      
+              {
+                renderFlag ? (
+                  <div>
+                  <ProFormText name="param_name" label="参数名" />
+                  <ProFormText name="var_type" label="变量类型" />
+                  <ProFormText name="var_name" label="变量名" />
+                  <ProFormText name="var_value" label="变量值" />
+                  </div>
+                ): (
+                  <div>
+                    hello
+                  </div>
+                )
+              }
+              
+              {/* <ProFormText name="param_name" label="参数名" />
+              <ProFormText name="var_type" label="变量类型" />
+              <ProFormText name="var_name" label="变量名" />
+              <ProFormText name="var_value" label="变量值" /> */}
             </ProFormGroup>
           </ProFormList>
         </ProFormList>

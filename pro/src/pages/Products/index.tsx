@@ -4,7 +4,7 @@ import { ProTable } from '@ant-design/pro-components';
 import { Button, Tag, Tooltip } from 'antd';
 import { request, FormattedMessage } from 'umi';
 import {getPersonParam, getProductInfo} from  '@/services/api/api';
-import React, {useState } from 'react';
+import React, {useState} from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import {sendEditProduct, sendEditParam, deleteProductParam} from  '@/services/api/api';
 import MF from './modal';
@@ -26,11 +26,9 @@ export type TableListItem = {
 };
 export default () => {
   
-const [productId, setProductId] = useState(1);
+const [productId, setProductId] = useState<any>(1);
 
-const test = () => {
-  <EditProduct></EditProduct>
-}
+
  
 const columns: ProColumns<TableListItem>[] = [
   {

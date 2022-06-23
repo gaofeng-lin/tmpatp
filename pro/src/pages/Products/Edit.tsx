@@ -81,9 +81,9 @@ interface Test {
     Value: string[]
 }
 
-const EditProduct:React.FC<Test> = (props: any) => {
+const EditProduct = () => {
 
-    const product_id = props.product_id
+    // const product_id = props.product_id
     const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
     defaultData.map((item) => item.id),);
 

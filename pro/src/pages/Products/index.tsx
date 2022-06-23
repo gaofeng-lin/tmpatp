@@ -75,7 +75,7 @@ const columns: ProColumns<TableListItem>[] = [
         }}
       >
         {/* 编辑 */}
-        <EditProduct product_id = {record.product_id}></EditProduct>
+        <EditProduct></EditProduct>
       </a>,
     <a href={'http://localhost:8080/#/login/' + record.product_id + '/' + record.cfdversion} target="_blank" rel="noopener noreferrer" key="view">
       使用产品

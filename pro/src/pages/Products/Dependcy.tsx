@@ -4,6 +4,7 @@ import {
     ProFormList,
     ProFormSelect,
     ProFormText,
+    ProCard,
   } from '@ant-design/pro-components';
   
   const Demot = () => {
@@ -24,6 +25,32 @@ import {
           name="globalUseMode"
           label="全局生效方式组件的类型"
         />
+        <ProFormList
+            name="users"
+            // label="用户信息"
+            initialValue={[
+              {
+                name: '1111',
+              },
+            ]}
+            creatorButtonProps={{
+              creatorButtonText: '添加模块',
+            }}
+            itemRender={({ listDom, action }, { record }) => {
+                return (
+                  <ProCard
+                    bordered
+                    extra={action}
+                    title={record?.name}
+                    style={{
+                      marginBottom: 8,
+                    }}
+                  >
+                    {listDom}
+                  </ProCard>
+                );
+              }}
+        >
         <ProFormList
           name={['default', 'users']}
           label="用户信息"
@@ -92,6 +119,7 @@ import {
               }}
             </ProFormDependency>
           </ProForm.Group>
+        </ProFormList>
         </ProFormList>
       </ProForm>
     );

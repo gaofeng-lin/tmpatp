@@ -12,6 +12,7 @@ import { Button, message, Input } from 'antd';
 import React, {useState} from 'react';
 import {sendProductInfo,getSolverNum} from  '@/services/api/api';
 import Demo from './NestedForm'
+import Demot from './Dependcy'
 
 
 const waitTime = (time: number = 100) => {
@@ -159,7 +160,8 @@ const EditProduct = () => {
             },
           }}
         /> */}
-        <Demo></Demo>
+        {/* <Demo></Demo> */}
+        <Demot></Demot>
       </ProForm.Item>
     </ModalForm>
   );
